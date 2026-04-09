@@ -16,11 +16,11 @@ export default async function HomePage() {
 
   return (
     <main className="relative min-h-screen">
+      <FooterMist />
+
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-8 md:py-12">
         <PostList posts={(posts as Post[]) || []} />
       </div>
-
-      <FooterMist />
     </main>
   )
 }
