@@ -1,23 +1,54 @@
-{/* Footer mist */}
-<div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 overflow-hidden">
-  <div
-    className="
-      absolute inset-x-[-12%] bottom-[-60px] h-[300px]
-      blur-[80px]
+"use client"
 
-      [background:
-        radial-gradient(140%_90%_at_50%_115%,rgba(255,240,210,0.18)_0%,rgba(255,225,170,0.10)_30%,rgba(255,210,140,0.05)_55%,rgba(255,255,255,0.03)_70%,transparent_85%),
-        radial-gradient(110%_70%_at_25%_115%,rgba(255,235,190,0.10)_0%,rgba(255,220,160,0.05)_40%,transparent_75%),
-        radial-gradient(110%_70%_at_75%_115%,rgba(255,240,210,0.08)_0%,rgba(255,225,180,0.04)_42%,transparent_76%),
-        linear-gradient(to_top,rgba(255,235,200,0.05),transparent_60%)
-      ]
+export function FooterMist() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[380px]"
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          maskImage: "linear-gradient(to top, black 42%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to top, black 42%, transparent 100%)",
+        }}
+      >
+        {/* Light mode */}
+        <div className="absolute inset-0 dark:hidden">
+          <div
+            className="absolute bottom-[-10px] left-[-8%] h-[230px] w-[58%] rounded-full"
+            style={{
+              background: "rgba(160, 118, 52, 0.16)",
+              filter: "blur(90px)",
+            }}
+          />
+          <div
+            className="absolute bottom-[0px] right-[-6%] h-[250px] w-[54%] rounded-full"
+            style={{
+              background: "rgba(196, 154, 84, 0.15)",
+              filter: "blur(100px)",
+            }}
+          />
+          <div
+            className="absolute bottom-[18px] left-[24%] h-[175px] w-[36%] rounded-full"
+            style={{
+              background: "rgba(224, 190, 120, 0.11)",
+              filter: "blur(80px)",
+            }}
+          />
+        </div>
 
-      dark:[background:
-        radial-gradient(145%_95%_at_50%_115%,rgba(255,220,140,0.22)_0%,rgba(255,205,120,0.12)_28%,rgba(255,190,100,0.07)_50%,rgba(255,235,200,0.04)_70%,transparent_85%),
-        radial-gradient(115%_75%_at_22%_115%,rgba(255,225,150,0.11)_0%,rgba(255,210,130,0.06)_38%,transparent_75%),
-        radial-gradient(115%_75%_at_78%_115%,rgba(255,235,180,0.09)_0%,rgba(255,220,150,0.05)_40%,transparent_76%),
-        linear-gradient(to_top,rgba(255,210,130,0.06),transparent_60%)
-      ]
-    "
-  />
-</div>
+        {/* Dark mode */}
+        <div className="absolute inset-0 hidden dark:block">
+          <div
+            className="absolute bottom-[-20px] left-[-8%] h-[220px] w-[58%] rounded-full"
+            style={{
+              background: "rgba(255, 244, 224, 0.11)",
+              filter: "blur(90px)",
+            }}
+          />
+          <div
+            className="absolute bottom-[-10px] right-[-6%] h-[240px] w-[54%] rounded-full"
+            style={{
+              background
