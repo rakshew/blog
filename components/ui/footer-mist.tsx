@@ -4,77 +4,76 @@ export function FooterMist() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[400px]"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[420px]"
     >
-      {/* Vertical fade to remove hard edge */}
       <div
         className="absolute inset-0"
         style={{
-          maskImage: "linear-gradient(to top, black 40%, transparent 100%)",
+          maskImage: "linear-gradient(to top, black 35%, transparent 100%)",
           WebkitMaskImage:
-            "linear-gradient(to top, black 40%, transparent 100%)",
+            "linear-gradient(to top, black 35%, transparent 100%)",
         }}
       >
-        {/* LIGHT MODE — STRONG GOLD */}
+        {/* LIGHT MODE — CLEAN, EVEN GOLD FIELD */}
         <div className="absolute inset-0 dark:hidden">
-          {/* Deep gold base */}
           <div
-            className="absolute bottom-[-10px] left-[-10%] h-[260px] w-[60%] rounded-full"
+            className="absolute bottom-[-60px] left-[-20%] h-[320px] w-[60%] rounded-full"
             style={{
-              background: "rgba(184, 134, 11, 0.28)", // dark gold
-              filter: "blur(100px)",
+              background: "rgba(255, 230, 140, 0.10)",
+              filter: "blur(140px)",
             }}
           />
-
-          {/* Rich amber layer */}
           <div
-            className="absolute bottom-[-20px] right-[-8%] h-[280px] w-[55%] rounded-full"
+            className="absolute bottom-[-70px] left-[15%] h-[340px] w-[50%] rounded-full"
             style={{
-              background: "rgba(218, 165, 32, 0.24)", // goldenrod
-              filter: "blur(110px)",
+              background: "rgba(255, 235, 160, 0.09)",
+              filter: "blur(150px)",
             }}
           />
-
-          {/* Bright gold highlight */}
           <div
-            className="absolute bottom-[20px] left-[25%] h-[200px] w-[40%] rounded-full"
+            className="absolute bottom-[-60px] right-[-18%] h-[320px] w-[60%] rounded-full"
             style={{
-              background: "rgba(255, 215, 0, 0.18)", // bright gold
-              filter: "blur(90px)",
+              background: "rgba(255, 225, 130, 0.08)",
+              filter: "blur(140px)",
             }}
           />
-
-          {/* Soft glow top layer */}
           <div
-            className="absolute bottom-[60px] left-[35%] h-[140px] w-[30%] rounded-full"
+            className="absolute bottom-[10px] left-[25%] h-[200px] w-[45%] rounded-full"
             style={{
-              background: "rgba(255, 230, 150, 0.14)",
-              filter: "blur(70px)",
+              background: "rgba(255, 245, 200, 0.07)",
+              filter: "blur(120px)",
             }}
           />
         </div>
 
-        {/* DARK MODE — KEEP CLEAN CREAM */}
+        {/* DARK MODE — CELESTIAL (NOT SMOKY) */}
         <div className="absolute inset-0 hidden dark:block">
           <div
-            className="absolute bottom-[-10px] left-[-10%] h-[260px] w-[60%] rounded-full"
+            className="absolute bottom-[-60px] left-[-20%] h-[320px] w-[60%] rounded-full"
             style={{
-              background: "rgba(255, 244, 224, 0.16)",
-              filter: "blur(100px)",
+              background: "rgba(255, 235, 200, 0.12)",
+              filter: "blur(140px)",
             }}
           />
           <div
-            className="absolute bottom-[-20px] right-[-8%] h-[280px] w-[55%] rounded-full"
+            className="absolute bottom-[-70px] left-[15%] h-[340px] w-[50%] rounded-full"
             style={{
-              background: "rgba(255, 236, 204, 0.14)",
-              filter: "blur(110px)",
+              background: "rgba(255, 245, 215, 0.10)",
+              filter: "blur(150px)",
             }}
           />
           <div
-            className="absolute bottom-[20px] left-[25%] h-[200px] w-[40%] rounded-full"
+            className="absolute bottom-[-60px] right-[-18%] h-[320px] w-[60%] rounded-full"
             style={{
-              background: "rgba(255, 248, 230, 0.10)",
-              filter: "blur(90px)",
+              background: "rgba(255, 240, 210, 0.09)",
+              filter: "blur(140px)",
+            }}
+          />
+          <div
+            className="absolute bottom-[10px] left-[25%] h-[200px] w-[45%] rounded-full"
+            style={{
+              background: "rgba(255, 250, 230, 0.08)",
+              filter: "blur(120px)",
             }}
           />
         </div>
