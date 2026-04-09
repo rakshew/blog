@@ -4,162 +4,88 @@ export function FooterMist() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[420px] overflow-hidden"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[360px] overflow-hidden"
     >
       <div
         className="absolute inset-0"
         style={{
-          maskImage: "linear-gradient(to top, black 32%, transparent 100%)",
+          maskImage: "linear-gradient(to top, black 26%, transparent 100%)",
           WebkitMaskImage:
-            "linear-gradient(to top, black 32%, transparent 100%)",
+            "linear-gradient(to top, black 26%, transparent 100%)",
         }}
       >
-        {/* Light theme: luminous champagne haze */}
+        {/* Light mode: heavenly gold radiance */}
         <div className="absolute inset-0 dark:hidden">
-          <div className="footer-mist footer-mist-light-1" />
-          <div className="footer-mist footer-mist-light-2" />
-          <div className="footer-mist footer-mist-light-3" />
-          <div className="footer-mist footer-mist-light-core" />
+          <div
+            className="absolute left-1/2 bottom-[-30px] -translate-x-1/2 h-[220px] w-[520px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(255,244,210,0.34) 0%, rgba(245,214,145,0.18) 38%, rgba(245,214,145,0.06) 68%, transparent 100%)",
+              filter: "blur(36px)",
+            }}
+          />
+          <div
+            className="absolute left-1/2 bottom-[18px] -translate-x-1/2 h-[120px] w-[240px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(255,250,232,0.30) 0%, rgba(255,236,188,0.14) 52%, transparent 100%)",
+              filter: "blur(22px)",
+            }}
+          />
+          <div
+            className="absolute left-[18%] bottom-[6px] h-[140px] w-[220px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(243,210,140,0.10) 0%, transparent 72%)",
+              filter: "blur(30px)",
+            }}
+          />
+          <div
+            className="absolute right-[16%] bottom-[0px] h-[150px] w-[240px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(243,210,140,0.09) 0%, transparent 72%)",
+              filter: "blur(32px)",
+            }}
+          />
         </div>
 
-        {/* Dark theme: cream divine glow */}
+        {/* Dark mode: celestial cream-gold glow */}
         <div className="absolute inset-0 hidden dark:block">
-          <div className="footer-mist footer-mist-dark-1" />
-          <div className="footer-mist footer-mist-dark-2" />
-          <div className="footer-mist footer-mist-dark-3" />
-          <div className="footer-mist footer-mist-dark-core" />
+          <div
+            className="absolute left-1/2 bottom-[-28px] -translate-x-1/2 h-[230px] w-[560px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(255,242,210,0.20) 0%, rgba(245,220,170,0.11) 40%, rgba(245,220,170,0.04) 70%, transparent 100%)",
+              filter: "blur(40px)",
+            }}
+          />
+          <div
+            className="absolute left-1/2 bottom-[18px] -translate-x-1/2 h-[120px] w-[250px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(255,248,230,0.18) 0%, rgba(255,236,198,0.09) 54%, transparent 100%)",
+              filter: "blur(24px)",
+            }}
+          />
+          <div
+            className="absolute left-[20%] bottom-[6px] h-[140px] w-[240px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(245,220,170,0.05) 0%, transparent 74%)",
+              filter: "blur(34px)",
+            }}
+          />
+          <div
+            className="absolute right-[18%] bottom-[0px] h-[150px] w-[250px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(245,220,170,0.05) 0%, transparent 74%)",
+              filter: "blur(34px)",
+            }}
+          />
         </div>
       </div>
-
-      <style jsx>{`
-        .footer-mist {
-          position: absolute;
-          border-radius: 9999px;
-          will-change: transform, opacity;
-          animation-duration: 14s;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-          animation-direction: alternate;
-        }
-
-        .footer-mist-light-1 {
-          left: -10%;
-          bottom: -24px;
-          width: 62%;
-          height: 250px;
-          background: rgba(255, 225, 168, 0.16);
-          filter: blur(110px);
-          animation-name: driftA;
-        }
-
-        .footer-mist-light-2 {
-          right: -10%;
-          bottom: -10px;
-          width: 58%;
-          height: 285px;
-          background: rgba(255, 236, 196, 0.18);
-          filter: blur(120px);
-          animation-name: driftB;
-        }
-
-        .footer-mist-light-3 {
-          left: 24%;
-          bottom: 18px;
-          width: 40%;
-          height: 190px;
-          background: rgba(255, 244, 214, 0.16);
-          filter: blur(95px);
-          animation-name: driftC;
-        }
-
-        .footer-mist-light-core {
-          left: 38%;
-          bottom: 52px;
-          width: 22%;
-          height: 120px;
-          background: rgba(255, 250, 235, 0.22);
-          filter: blur(70px);
-          animation-name: pulseGlow;
-        }
-
-        .footer-mist-dark-1 {
-          left: -10%;
-          bottom: -24px;
-          width: 62%;
-          height: 250px;
-          background: rgba(255, 242, 218, 0.13);
-          filter: blur(110px);
-          animation-name: driftA;
-        }
-
-        .footer-mist-dark-2 {
-          right: -10%;
-          bottom: -10px;
-          width: 58%;
-          height: 285px;
-          background: rgba(255, 236, 210, 0.14);
-          filter: blur(120px);
-          animation-name: driftB;
-        }
-
-        .footer-mist-dark-3 {
-          left: 24%;
-          bottom: 18px;
-          width: 40%;
-          height: 190px;
-          background: rgba(255, 248, 228, 0.11);
-          filter: blur(95px);
-          animation-name: driftC;
-        }
-
-        .footer-mist-dark-core {
-          left: 38%;
-          bottom: 52px;
-          width: 22%;
-          height: 120px;
-          background: rgba(255, 252, 240, 0.14);
-          filter: blur(70px);
-          animation-name: pulseGlow;
-        }
-
-        @keyframes driftA {
-          from {
-            transform: translate3d(0, 0, 0);
-          }
-          to {
-            transform: translate3d(18px, -8px, 0);
-          }
-        }
-
-        @keyframes driftB {
-          from {
-            transform: translate3d(0, 0, 0);
-          }
-          to {
-            transform: translate3d(-16px, -10px, 0);
-          }
-        }
-
-        @keyframes driftC {
-          from {
-            transform: translate3d(0, 0, 0);
-          }
-          to {
-            transform: translate3d(10px, -6px, 0);
-          }
-        }
-
-        @keyframes pulseGlow {
-          from {
-            transform: translate3d(0, 0, 0) scale(1);
-            opacity: 0.9;
-          }
-          to {
-            transform: translate3d(0, -4px, 0) scale(1.04);
-            opacity: 1;
-          }
-        }
-      `}</style>
     </div>
   )
 }
