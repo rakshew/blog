@@ -12,7 +12,7 @@ const _ebGaramond = EB_Garamond({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'rakshi | blog',
   description: 'Thoughts, essays, and explorations.',
-  generator: 'v0.app',
+  generator: 'Next.js',
   icons: {
     icon: [
       {
