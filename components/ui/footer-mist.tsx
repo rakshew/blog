@@ -4,37 +4,55 @@ export function FooterMist() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[300px] overflow-hidden"
+      className="pointer-events-none fixed inset-x-0 bottom-0 h-[340px] z-0 overflow-hidden"
     >
-      {/* Light mode → warm gold haze over cream */}
+      {/* Light mode */}
       <div className="absolute inset-0 dark:hidden">
         <div
-          className="absolute bottom-[-80px] left-[-10%] h-[240px] w-[60%] rounded-full blur-3xl"
-          style={{ background: "rgba(214, 188, 141, 0.18)" }} // soft gold
+          className="absolute bottom-[10px] left-[-8%] h-[220px] w-[58%] rounded-full"
+          style={{
+            background: "rgba(186, 146, 78, 0.16)",
+            filter: "blur(70px)",
+          }}
         />
         <div
-          className="absolute bottom-[-100px] right-[-8%] h-[260px] w-[55%] rounded-full blur-3xl"
-          style={{ background: "rgba(200, 170, 120, 0.14)" }}
+          className="absolute bottom-[0px] right-[-6%] h-[240px] w-[54%] rounded-full"
+          style={{
+            background: "rgba(214, 188, 141, 0.18)",
+            filter: "blur(80px)",
+          }}
         />
         <div
-          className="absolute bottom-[-60px] left-[25%] h-[180px] w-[40%] rounded-full blur-3xl"
-          style={{ background: "rgba(180, 150, 100, 0.08)" }}
+          className="absolute bottom-[30px] left-[24%] h-[160px] w-[36%] rounded-full"
+          style={{
+            background: "rgba(255, 232, 186, 0.12)",
+            filter: "blur(60px)",
+          }}
         />
       </div>
 
-      {/* Dark mode → cream mist over charcoal */}
+      {/* Dark mode */}
       <div className="absolute inset-0 hidden dark:block">
         <div
-          className="absolute bottom-[-80px] left-[-10%] h-[240px] w-[60%] rounded-full blur-3xl"
-          style={{ background: "rgba(255, 248, 230, 0.14)" }}
+          className="absolute bottom-[10px] left-[-8%] h-[220px] w-[58%] rounded-full"
+          style={{
+            background: "rgba(255, 244, 224, 0.20)",
+            filter: "blur(70px)",
+          }}
         />
         <div
-          className="absolute bottom-[-100px] right-[-8%] h-[260px] w-[55%] rounded-full blur-3xl"
-          style={{ background: "rgba(255, 245, 220, 0.12)" }}
+          className="absolute bottom-[0px] right-[-6%] h-[240px] w-[54%] rounded-full"
+          style={{
+            background: "rgba(255, 236, 204, 0.18)",
+            filter: "blur(80px)",
+          }}
         />
         <div
-          className="absolute bottom-[-60px] left-[25%] h-[180px] w-[40%] rounded-full blur-3xl"
-          style={{ background: "rgba(255, 240, 210, 0.08)" }}
+          className="absolute bottom-[30px] left-[24%] h-[160px] w-[36%] rounded-full"
+          style={{
+            background: "rgba(255, 248, 230, 0.12)",
+            filter: "blur(60px)",
+          }}
         />
       </div>
     </div>
