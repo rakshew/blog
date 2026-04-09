@@ -9,6 +9,19 @@ interface PostFormProps {
   post?: Post
 }
 
+function formatForDatetimeLocal(dateString: string) {
+  const date = new Date(dateString)
+  const pad = (n: number) => String(n).padStart(2, "0")
+
+  const year = date.getFullYear()
+  const month = pad(date.getMonth() + 1)
+  const day = pad(date.getDate())
+  const hours = pad(date.getHours())
+  const minutes = pad(date.getMinutes())
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
 export function PostForm({ post }: PostFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -24,6 +37,9 @@ export function PostForm({ post }: PostFormProps) {
   )
   const [accent, setAccent] = useState<AccentColor>(post?.accent || "coral")
   const [isPoetry, setIsPoetry] = useState(post?.is_poetry || false)
+  const [publishedAt, setPublishedAt] = useState(
+    post?.published_at ? formatForDatetimeLocal(post.published_at) : ""
+  )
 
   const generateSlug = (text: string) => {
     return text
@@ -58,10 +74,7 @@ export function PostForm({ post }: PostFormProps) {
       status,
       accent,
       is_poetry: isPoetry,
-      published_at:
-        status === "published" && !post?.published_at
-          ? new Date().toISOString()
-          : post?.published_at || null,
+      published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
     }
 
     if (post) {
@@ -141,6 +154,22 @@ export function PostForm({ post }: PostFormProps) {
       </div>
 
       <div className="space-y-2">
+        <label htmlFor="published_at" className="text-sm font-medium">
+          Post date and time
+        </label>
+        <input
+          id="published_at"
+          type="datetime-local"
+          value={publishedAt}
+          onChange={(e) => setPublishedAt(e.target.value)}
+          className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+        <p className="text-xs text-muted-foreground">
+          This is the date shown on the post, above the title.
+        </p>
+      </div>
+
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
           <label htmlFor="content" className="text-sm font-medium">
             Content
@@ -164,7 +193,11 @@ export function PostForm({ post }: PostFormProps) {
           className={`w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-y text-sm ${
             isPoetry ? "font-serif leading-relaxed" : "font-mono"
           }`}
-          placeholder={isPoetry ? "Write your poetry here...\nLine breaks will be preserved." : ""}
+          placeholder={
+            isPoetry
+              ? "Write your poetry here...\nLine breaks will be preserved."
+              : ""
+          }
         />
         {isPoetry && (
           <p className="text-xs text-muted-foreground">
