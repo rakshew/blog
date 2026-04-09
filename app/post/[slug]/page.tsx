@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ACCENT_COLORS, type Post } from "@/lib/types"
 import type { Metadata } from "next"
 
-export const revalidate = 60
+export const revalidate = 0
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -13,14 +13,19 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const supabase = await createClient()
-  const { data: post } = await supabase
+
+  const { data: post, error } = await supabase
     .from("posts")
     .select("title, excerpt")
     .eq("slug", slug)
     .eq("status", "published")
     .single()
 
-  if (!post) {
+  console.log("generateMetadata slug:", slug)
+  console.log("generateMetadata post:", post)
+  console.log("generateMetadata error:", error)
+
+  if (error || !post) {
     return { title: "Post not found" }
   }
 
@@ -43,32 +48,36 @@ export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: post } = await supabase
+  const { data: post, error } = await supabase
     .from("posts")
     .select("*")
     .eq("slug", slug)
     .eq("status", "published")
     .single()
 
-  if (!post) {
+  console.log("PostPage slug:", slug)
+  console.log("PostPage post:", post)
+  console.log("PostPage error:", error)
+
+  if (error || !post) {
     notFound()
   }
 
   const typedPost = post as Post
-  const accentColor = ACCENT_COLORS.find((c) => c.value === typedPost.accent)?.color || ACCENT_COLORS[0].color
+  const accentColor =
+    ACCENT_COLORS.find((c) => c.value === typedPost.accent)?.color ||
+    ACCENT_COLORS[0].color
 
   return (
     <article className="max-w-2xl mx-auto px-6 py-8 md:py-12">
-      <div 
+      <div
         className="w-full h-1 rounded-full mb-8"
         style={{ backgroundColor: accentColor }}
       />
+
       <Link
         href="/"
-        className="text-sm text-muted-foreground transition-colors inline-flex items-center gap-1"
-        style={{ '--accent': accentColor } as React.CSSProperties}
-        onMouseEnter={(e) => e.currentTarget.style.color = accentColor}
-        onMouseLeave={(e) => e.currentTarget.style.color = ''}
+        className="text-sm text-muted-foreground inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -90,10 +99,12 @@ export default async function PostPage({ params }: Props) {
         <time className="text-sm text-muted-foreground">
           {formatDate(typedPost.published_at || typedPost.created_at)}
         </time>
+
         <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl mt-3 leading-tight text-balance">
           {typedPost.title}
         </h1>
-        {typedPost.tags.length > 0 && (
+
+        {typedPost.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
             {typedPost.tags.map((tag) => (
               <span
