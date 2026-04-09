@@ -6,35 +6,36 @@ export function FooterMist() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[380px]"
     >
+      {/* Shared soft vertical fade so the mist dissolves upward */}
       <div
         className="absolute inset-0"
         style={{
-          maskImage: "linear-gradient(to top, black 42%, transparent 100%)",
+          maskImage: "linear-gradient(to top, black 55%, transparent 100%)",
           WebkitMaskImage:
-            "linear-gradient(to top, black 42%, transparent 100%)",
+            "linear-gradient(to top, black 55%, transparent 100%)",
         }}
       >
         {/* Light mode */}
         <div className="absolute inset-0 dark:hidden">
           <div
-            className="absolute bottom-[-10px] left-[-8%] h-[230px] w-[58%] rounded-full"
+            className="absolute bottom-[-20px] left-[-8%] h-[220px] w-[58%] rounded-full"
             style={{
-              background: "rgba(160, 118, 52, 0.16)",
-              filter: "blur(90px)",
+              background: "rgba(186, 146, 78, 0.10)",
+              filter: "blur(85px)",
             }}
           />
           <div
-            className="absolute bottom-[0px] right-[-6%] h-[250px] w-[54%] rounded-full"
+            className="absolute bottom-[-10px] right-[-6%] h-[240px] w-[54%] rounded-full"
             style={{
-              background: "rgba(196, 154, 84, 0.15)",
-              filter: "blur(100px)",
+              background: "rgba(214, 188, 141, 0.12)",
+              filter: "blur(95px)",
             }}
           />
           <div
-            className="absolute bottom-[18px] left-[24%] h-[175px] w-[36%] rounded-full"
+            className="absolute bottom-[10px] left-[24%] h-[170px] w-[36%] rounded-full"
             style={{
-              background: "rgba(224, 190, 120, 0.11)",
-              filter: "blur(80px)",
+              background: "rgba(255, 232, 186, 0.08)",
+              filter: "blur(75px)",
             }}
           />
         </div>
@@ -44,11 +45,26 @@ export function FooterMist() {
           <div
             className="absolute bottom-[-20px] left-[-8%] h-[220px] w-[58%] rounded-full"
             style={{
-              background: "rgba(255, 244, 224, 0.11)",
+              background: "rgba(255, 244, 224, 0.12)",
               filter: "blur(90px)",
             }}
           />
           <div
             className="absolute bottom-[-10px] right-[-6%] h-[240px] w-[54%] rounded-full"
             style={{
-              background
+              background: "rgba(255, 236, 204, 0.10)",
+              filter: "blur(100px)",
+            }}
+          />
+          <div
+            className="absolute bottom-[10px] left-[24%] h-[170px] w-[36%] rounded-full"
+            style={{
+              background: "rgba(255, 248, 230, 0.07)",
+              filter: "blur(80px)",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
