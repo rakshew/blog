@@ -9,71 +9,78 @@ export function FooterMist() {
       <div
         className="absolute inset-0"
         style={{
-          maskImage: "linear-gradient(to top, black 38%, transparent 100%)",
+          maskImage: "linear-gradient(to top, black 35%, transparent 100%)",
           WebkitMaskImage:
-            "linear-gradient(to top, black 38%, transparent 100%)",
+            "linear-gradient(to top, black 35%, transparent 100%)",
         }}
       >
-        {/* Light theme: luminous champagne / ivory heaven glow */}
+        {/* LIGHT MODE — divine gold radiance */}
         <div className="absolute inset-0 dark:hidden">
+          {/* outer haze */}
           <div
-            className="absolute bottom-[-30px] left-[-10%] h-[250px] w-[60%] rounded-full"
+            className="absolute bottom-[-30px] left-[-12%] h-[260px] w-[62%] rounded-full"
             style={{
-              background: "rgba(255, 244, 214, 0.22)",
-              filter: "blur(100px)",
+              background: "rgba(210, 165, 85, 0.18)",
+              filter: "blur(120px)",
             }}
           />
+
+          {/* mid glow */}
           <div
-            className="absolute bottom-[-20px] right-[-8%] h-[280px] w-[56%] rounded-full"
+            className="absolute bottom-[-10px] right-[-10%] h-[300px] w-[58%] rounded-full"
             style={{
-              background: "rgba(255, 236, 196, 0.18)",
+              background: "rgba(235, 195, 120, 0.20)",
+              filter: "blur(130px)",
+            }}
+          />
+
+          {/* inner warm light */}
+          <div
+            className="absolute bottom-[10px] left-[26%] h-[200px] w-[40%] rounded-full"
+            style={{
+              background: "rgba(255, 225, 160, 0.22)",
               filter: "blur(110px)",
             }}
           />
+
+          {/* divine highlight (key layer) */}
           <div
-            className="absolute bottom-[10px] left-[24%] h-[190px] w-[38%] rounded-full"
+            className="absolute bottom-[40px] left-[38%] h-[120px] w-[22%] rounded-full"
             style={{
-              background: "rgba(255, 250, 232, 0.16)",
-              filter: "blur(90px)",
-            }}
-          />
-          <div
-            className="absolute bottom-[40px] left-[35%] h-[120px] w-[22%] rounded-full"
-            style={{
-              background: "rgba(255, 255, 245, 0.14)",
-              filter: "blur(70px)",
+              background: "rgba(255, 245, 210, 0.25)",
+              filter: "blur(80px)",
             }}
           />
         </div>
 
-        {/* Dark theme: cream / celestial glow */}
+        {/* DARK MODE — celestial cream glow */}
         <div className="absolute inset-0 hidden dark:block">
           <div
-            className="absolute bottom-[-30px] left-[-10%] h-[250px] w-[60%] rounded-full"
+            className="absolute bottom-[-30px] left-[-12%] h-[260px] w-[62%] rounded-full"
             style={{
-              background: "rgba(255, 245, 220, 0.18)",
-              filter: "blur(105px)",
+              background: "rgba(255, 240, 210, 0.16)",
+              filter: "blur(120px)",
             }}
           />
           <div
-            className="absolute bottom-[-20px] right-[-8%] h-[280px] w-[56%] rounded-full"
+            className="absolute bottom-[-10px] right-[-10%] h-[300px] w-[58%] rounded-full"
             style={{
-              background: "rgba(255, 238, 210, 0.15)",
-              filter: "blur(115px)",
+              background: "rgba(255, 235, 200, 0.14)",
+              filter: "blur(130px)",
             }}
           />
           <div
-            className="absolute bottom-[10px] left-[24%] h-[190px] w-[38%] rounded-full"
+            className="absolute bottom-[10px] left-[26%] h-[200px] w-[40%] rounded-full"
             style={{
-              background: "rgba(255, 250, 235, 0.12)",
-              filter: "blur(95px)",
+              background: "rgba(255, 245, 220, 0.12)",
+              filter: "blur(110px)",
             }}
           />
           <div
-            className="absolute bottom-[40px] left-[35%] h-[120px] w-[22%] rounded-full"
+            className="absolute bottom-[40px] left-[38%] h-[120px] w-[22%] rounded-full"
             style={{
-              background: "rgba(255, 255, 245, 0.10)",
-              filter: "blur(75px)",
+              background: "rgba(255, 250, 230, 0.12)",
+              filter: "blur(80px)",
             }}
           />
         </div>
