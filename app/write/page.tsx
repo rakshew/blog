@@ -9,12 +9,12 @@ export default function WritePage() {
             For a Line
           </h1>
           <p className="text-lg text-muted-foreground">
-            Sometimes, something belongs elsewhere.
+            Sometimes, a line belongs somewhere else.
           </p>
         </div>
 
         {/* Description */}
-        <div className="space-y-8 text-[1.2rem] leading-[1.9] text-left">
+        <div className="space-y-8 text-[1.2rem] leading-[1.9]">
           
           <p>
             Maybe it was the first time you tried to say something and stopped halfway, the words catching somewhere between your throat and your breath.
