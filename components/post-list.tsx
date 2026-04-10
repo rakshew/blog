@@ -40,7 +40,7 @@ export function PostList({ posts }: { posts: Post[] }) {
               </div>
 
               <h2
-                className="post-list-title font-serif text-[2rem] tracking-tight mt-2 leading-snug transition-colors"
+                className="post-list-title font-serif text-[1.00rem] tracking-tight mt-2 leading-snug transition-colors"
                 style={{ "--hover-color": accentColor } as React.CSSProperties}
               >
                 <span className="group-hover:text-[var(--hover-color)] transition-colors">
@@ -49,7 +49,7 @@ export function PostList({ posts }: { posts: Post[] }) {
               </h2>
 
               {post.excerpt && (
-                <p className="post-list-excerpt mt-2 text-[1.12rem] text-muted-foreground leading-relaxed">
+                <p className="post-list-excerpt mt-2 text-[0.75rem] text-muted-foreground leading-relaxed">
                   {post.excerpt}
                 </p>
               )}
