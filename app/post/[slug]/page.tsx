@@ -21,10 +21,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .eq("status", "published")
     .single()
 
-  console.log("generateMetadata slug:", slug)
-  console.log("generateMetadata post:", post)
-  console.log("generateMetadata error:", error)
-
   if (error || !post) {
     return { title: "Post not found" }
   }
@@ -55,26 +51,25 @@ export default async function PostPage({ params }: Props) {
     .eq("status", "published")
     .single()
 
-  console.log("PostPage slug:", slug)
-  console.log("PostPage post:", post)
-  console.log("PostPage error:", error)
-
   if (error || !post) {
     notFound()
   }
 
   const typedPost = post as Post
+
   const accentColor =
     ACCENT_COLORS.find((c) => c.value === typedPost.accent)?.color ||
     ACCENT_COLORS[0].color
 
   return (
     <article className="max-w-2xl mx-auto px-6 py-8 md:py-12">
+      {/* Accent line */}
       <div
         className="w-full h-1 rounded-full mb-8"
         style={{ backgroundColor: accentColor }}
       />
 
+      {/* Back link */}
       <Link
         href="/"
         className="text-sm text-muted-foreground inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
@@ -95,12 +90,13 @@ export default async function PostPage({ params }: Props) {
         Back
       </Link>
 
+      {/* Header */}
       <header className="mt-8">
         <time className="text-sm text-muted-foreground">
           {formatDate(typedPost.published_at || typedPost.created_at)}
         </time>
 
-        <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl mt-3 leading-tight text-balance">
+        <h1 className="font-serif text-2xl md:text-3xl mt-3 leading-tight text-balance">
           {typedPost.title}
         </h1>
 
@@ -118,23 +114,17 @@ export default async function PostPage({ params }: Props) {
         )}
       </header>
 
-      <div className="mt-10 prose prose-neutral dark:prose-invert max-w-none">
-        {typedPost.is_poetry ? (
-          <div className="font-serif text-lg leading-loose whitespace-pre-line">
-            {typedPost.content}
-          </div>
-        ) : (
-          <div
-            className="text-lg leading-relaxed space-y-6 [&>p]:mb-6"
-            dangerouslySetInnerHTML={{
-              __html: typedPost.content
-                .split("\n\n")
-                .map((p) => `<p>${p}</p>`)
-                .join(""),
-            }}
-          />
-        )}
-      </div>
+      {/* Content */}
+      <div
+        className={`mt-10 prose prose-neutral dark:prose-invert max-w-none ${
+          typedPost.is_poetry
+            ? "font-serif text-lg leading-loose"
+            : "text-lg leading-relaxed"
+        }`}
+        dangerouslySetInnerHTML={{
+          __html: typedPost.content,
+        }}
+      />
     </article>
   )
 }
