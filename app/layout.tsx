@@ -10,8 +10,20 @@ const _inter = Inter({ subsets: ['latin'] })
 const _ebGaramond = EB_Garamond({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'rakshi | blog',
-  description: 'Thoughts, essays, and explorations.',
+  title: 'rakshi',
+  description: 'Poetry, for what beats.',
+  openGraph: {
+    title: 'rakshi',
+    description: 'Poetry, for what beats.',
+    url: 'https://poetry.rakshi.xyz/',
+    siteName: 'rakshi',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'rakshi',
+    description: 'Poetry, for what beats.',
+  },
   generator: 'Next.js',
   icons: {
     icon: [
@@ -41,9 +53,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans min-h-screen flex flex-col">
