@@ -1,5 +1,8 @@
+"use client"
+
 import Link from "next/link"
 import { ThemeToggle } from "./theme-toggle"
+import { AccessibilityToggle } from "./accessibility-toggle"
 
 export function Header() {
   return (
@@ -29,6 +32,7 @@ export function Header() {
             🌹
           </Link>
 
+          <AccessibilityToggle />
           <ThemeToggle />
         </div>
       </div>
