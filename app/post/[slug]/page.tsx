@@ -40,6 +40,10 @@ function formatDate(dateString: string) {
   })
 }
 
+function looksLikeHtml(content: string) {
+  return /<\/?[a-z][\s\S]*>/i.test(content)
+}
+
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const supabase = await createClient()
@@ -56,7 +60,6 @@ export default async function PostPage({ params }: Props) {
   }
 
   const typedPost = post as Post
-
   const accentColor =
     ACCENT_COLORS.find((c) => c.value === typedPost.accent)?.color ||
     ACCENT_COLORS[0].color
@@ -112,14 +115,26 @@ export default async function PostPage({ params }: Props) {
       </header>
 
       {typedPost.is_poetry ? (
-        <div className="mt-10 font-serif text-lg leading-loose whitespace-pre-line">
-          {typedPost.content}
-        </div>
+        looksLikeHtml(typedPost.content) ? (
+          <div
+            className="mt-10 font-serif text-lg leading-loose"
+            dangerouslySetInnerHTML={{ __html: typedPost.content }}
+          />
+        ) : (
+          <div className="mt-10 font-serif text-lg leading-loose whitespace-pre-line">
+            {typedPost.content}
+          </div>
+        )
       ) : (
         <div
           className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed"
           dangerouslySetInnerHTML={{
-            __html: typedPost.content,
+            __html: looksLikeHtml(typedPost.content)
+              ? typedPost.content
+              : typedPost.content
+                  .split("\n\n")
+                  .map((p) => `<p>${p}</p>`)
+                  .join(""),
           }}
         />
       )}
