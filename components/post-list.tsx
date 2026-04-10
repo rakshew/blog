@@ -40,7 +40,7 @@ export function PostList({ posts }: { posts: Post[] }) {
               </div>
 
               <h2
-                className="post-list-title font-serif text-[2rem] tracking-tight mt-2 leading-snug transition-colors"
+                className="post-list-title font-serif text-[1.7rem] tracking-tight mt-2 leading-snug transition-colors"
                 style={{ "--hover-color": accentColor } as React.CSSProperties}
               >
                 <span className="group-hover:text-[var(--hover-color)] transition-colors">
