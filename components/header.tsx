@@ -13,13 +13,20 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-4">
-          {/* Tea icon with subtle hover */}
           <Link
             href="/tea"
             className="text-lg hover:opacity-70 transition-opacity"
             title="for us"
           >
             ☕
+          </Link>
+
+          <Link
+            href="/write"
+            className="text-lg hover:opacity-70 transition-opacity"
+            title="for a line"
+          >
+            ✿
           </Link>
 
           <ThemeToggle />
