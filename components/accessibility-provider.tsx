@@ -13,7 +13,6 @@ type AccessibilitySettings = {
 type AccessibilityContextType = {
   settings: AccessibilitySettings
   toggleSetting: (key: keyof AccessibilitySettings) => void
-  setDyslexicMode: (value: boolean) => void
 }
 
 const defaultSettings: AccessibilitySettings = {
@@ -43,8 +42,6 @@ export function AccessibilityProvider({
   }, [])
 
   useEffect(() => {
-    localStorage.setItem("rakshi-accessibility", JSON.stringify(settings))
-
     const root = document.documentElement
 
     root.classList.toggle("a11y-dyslexic", settings.dyslexicMode)
@@ -52,6 +49,8 @@ export function AccessibilityProvider({
     root.classList.toggle("a11y-extra-spacing", settings.extraSpacing)
     root.classList.toggle("a11y-high-contrast", settings.highContrast)
     root.classList.toggle("a11y-reduce-motion", settings.reduceMotion)
+
+    localStorage.setItem("rakshi-accessibility", JSON.stringify(settings))
   }, [settings])
 
   const value = useMemo(
@@ -59,9 +58,6 @@ export function AccessibilityProvider({
       settings,
       toggleSetting: (key: keyof AccessibilitySettings) => {
         setSettings((prev) => ({ ...prev, [key]: !prev[key] }))
-      },
-      setDyslexicMode: (value: boolean) => {
-        setSettings((prev) => ({ ...prev, dyslexicMode: value }))
       },
     }),
     [settings]
