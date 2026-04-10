@@ -114,17 +114,19 @@ html.a11y-dyslexic h6 {
 }
 
 /* Larger text */
+/* Homepage post list accessibility scaling */
+html.a11y-large-text .post-list-meta {
+  font-size: 1.12rem !important;
+}
+
 html.a11y-large-text .post-list-title {
-  font-size: 2.35rem !important;
+  font-size: 2.4rem !important;
   line-height: 1.28 !important;
 }
 
-html.a11y-large-text .post-list-meta {
-  font-size: 1.08rem !important;
-}
-
 html.a11y-large-text .post-list-excerpt {
-  font-size: 1.16rem !important;
+  font-size: 1.28rem !important;
+  line-height: 1.8 !important;
 }
 
 html.a11y-large-text p,
