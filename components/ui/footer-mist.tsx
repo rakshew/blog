@@ -1,83 +1,16 @@
-"use client"
-
 export function FooterMist() {
   return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[420px]"
-    >
-      <div
-        className="absolute inset-0"
-        style={{
-          maskImage: "linear-gradient(to top, black 35%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to top, black 35%, transparent 100%)",
-        }}
-      >
-        {/* LIGHT MODE — CLEAN, EVEN GOLD FIELD */}
-        <div className="absolute inset-0 dark:hidden">
-          <div
-            className="absolute bottom-[-60px] left-[-20%] h-[320px] w-[60%] rounded-full"
-            style={{
-              background: "rgba(255, 230, 140, 0.10)",
-              filter: "blur(140px)",
-            }}
-          />
-          <div
-            className="absolute bottom-[-70px] left-[15%] h-[340px] w-[50%] rounded-full"
-            style={{
-              background: "rgba(255, 235, 160, 0.09)",
-              filter: "blur(150px)",
-            }}
-          />
-          <div
-            className="absolute bottom-[-60px] right-[-18%] h-[320px] w-[60%] rounded-full"
-            style={{
-              background: "rgba(255, 225, 130, 0.08)",
-              filter: "blur(140px)",
-            }}
-          />
-          <div
-            className="absolute bottom-[10px] left-[25%] h-[200px] w-[45%] rounded-full"
-            style={{
-              background: "rgba(255, 245, 200, 0.07)",
-              filter: "blur(120px)",
-            }}
-          />
-        </div>
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[400px] overflow-hidden">
+      
+      {/* Main golden mist */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(255,200,120,0.22),_transparent_70%)] dark:bg-[radial-gradient(ellipse_at_bottom,_rgba(255,200,120,0.10),_transparent_70%)] blur-3xl" />
 
-        {/* DARK MODE — CELESTIAL (NOT SMOKY) */}
-        <div className="absolute inset-0 hidden dark:block">
-          <div
-            className="absolute bottom-[-60px] left-[-20%] h-[320px] w-[60%] rounded-full"
-            style={{
-              background: "rgba(255, 235, 200, 0.12)",
-              filter: "blur(140px)",
-            }}
-          />
-          <div
-            className="absolute bottom-[-70px] left-[15%] h-[340px] w-[50%] rounded-full"
-            style={{
-              background: "rgba(255, 245, 215, 0.10)",
-              filter: "blur(150px)",
-            }}
-          />
-          <div
-            className="absolute bottom-[-60px] right-[-18%] h-[320px] w-[60%] rounded-full"
-            style={{
-              background: "rgba(255, 240, 210, 0.09)",
-              filter: "blur(140px)",
-            }}
-          />
-          <div
-            className="absolute bottom-[10px] left-[25%] h-[200px] w-[45%] rounded-full"
-            style={{
-              background: "rgba(255, 250, 230, 0.08)",
-              filter: "blur(120px)",
-            }}
-          />
-        </div>
-      </div>
+      {/* Soft spread layer */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(255,215,150,0.12),_transparent_75%)] dark:bg-[radial-gradient(ellipse_at_bottom,_rgba(255,215,150,0.06),_transparent_75%)] blur-2xl" />
+
+      {/* Wide glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(255,190,100,0.08),_transparent_80%)] dark:bg-[radial-gradient(ellipse_at_bottom,_rgba(255,190,100,0.05),_transparent_80%)] blur-xl" />
+
     </div>
   )
 }
