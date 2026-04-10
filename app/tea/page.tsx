@@ -31,7 +31,7 @@ export default function TeaPage() {
             on the wooden bench.
           </p>
 
-          <p className="text-xl">Would you come have tea with me?</p>
+          <p className="text-xl">Patron Our Second Cup of Tea?</p>
         </div>
 
         <div className="space-y-4 pt-4">
