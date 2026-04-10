@@ -88,3 +88,84 @@
 ::selection {
   background-color: hsl(11 66% 62% / 0.2);
 }
+/* =========================
+   ACCESSIBILITY MODES
+========================= */
+
+/* Dyslexic mode */
+html.a11y-dyslexic body,
+html.a11y-dyslexic .font-serif,
+html.a11y-dyslexic .font-sans,
+html.a11y-dyslexic input,
+html.a11y-dyslexic textarea,
+html.a11y-dyslexic button,
+html.a11y-dyslexic select,
+html.a11y-dyslexic p,
+html.a11y-dyslexic span,
+html.a11y-dyslexic a,
+html.a11y-dyslexic li,
+html.a11y-dyslexic h1,
+html.a11y-dyslexic h2,
+html.a11y-dyslexic h3,
+html.a11y-dyslexic h4,
+html.a11y-dyslexic h5,
+html.a11y-dyslexic h6 {
+  font-family: Arial, Verdana, sans-serif !important;
+}
+
+/* Larger text */
+html.a11y-large-text {
+  font-size: 118% !important;
+}
+
+html.a11y-large-text h1 {
+  font-size: 2.25rem !important;
+}
+
+html.a11y-large-text h2 {
+  font-size: 1.75rem !important;
+}
+
+html.a11y-large-text p,
+html.a11y-large-text li,
+html.a11y-large-text a,
+html.a11y-large-text span,
+html.a11y-large-text div {
+  font-size: 1.08rem !important;
+}
+
+/* Extra spacing */
+html.a11y-extra-spacing body,
+html.a11y-extra-spacing p,
+html.a11y-extra-spacing li,
+html.a11y-extra-spacing h1,
+html.a11y-extra-spacing h2,
+html.a11y-extra-spacing h3,
+html.a11y-extra-spacing h4,
+html.a11y-extra-spacing h5,
+html.a11y-extra-spacing h6,
+html.a11y-extra-spacing a,
+html.a11y-extra-spacing span,
+html.a11y-extra-spacing div {
+  line-height: 1.95 !important;
+  letter-spacing: 0.03em !important;
+  word-spacing: 0.08em !important;
+}
+
+/* High contrast */
+html.a11y-high-contrast body {
+  filter: contrast(1.18) brightness(1.05) !important;
+}
+
+html.a11y-high-contrast .text-muted-foreground {
+  opacity: 1 !important;
+}
+
+/* Reduce motion */
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
