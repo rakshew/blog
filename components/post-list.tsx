@@ -20,48 +20,61 @@ export function PostList({ posts }: { posts: Post[] }) {
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       {posts.map((post) => {
-        const accentColor = ACCENT_COLORS.find((c) => c.value === post.accent)?.color || ACCENT_COLORS[0].color
+        const accentColor =
+          ACCENT_COLORS.find((c) => c.value === post.accent)?.color ||
+          ACCENT_COLORS[0].color
+
         return (
-        <article key={post.id} className="group">
-          <Link href={`/post/${post.slug}`} className="block">
-            <div className="flex items-center gap-3">
-              <span
-                className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{ backgroundColor: accentColor }}
-              />
-              <time className="text-sm text-muted-foreground">
-                {formatDate(post.published_at || post.created_at)}
-              </time>
-            </div>
-            <h2 
-              className="font-serif text-2xl md:text-3xl mt-2 transition-colors text-balance"
-              style={{ '--hover-color': accentColor } as React.CSSProperties}
-            >
-              <span className="group-hover:text-[var(--hover-color)] transition-colors">
-                {post.title}
-              </span>
-            </h2>
-            {post.excerpt && (
-              <p className="mt-3 text-muted-foreground leading-relaxed">
-                {post.excerpt}
-              </p>
-            )}
-            {post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-4">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs text-muted-foreground border border-border px-2 py-1 rounded"
-                  >
-                    {tag}
-                  </span>
-                ))}
+          <article key={post.id} className="group">
+            <Link href={`/post/${post.slug}`} className="block">
+              
+              {/* Date + dot */}
+              <div className="flex items-center gap-3">
+                <span
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: accentColor }}
+                />
+                <time className="text-sm text-muted-foreground">
+                  {formatDate(post.published_at || post.created_at)}
+                </time>
               </div>
-            )}
-          </Link>
-        </article>
+
+              {/* Title */}
+              <h2
+                className="font-serif text-[1.4rem] md:text-[1.6rem] mt-2 leading-snug transition-colors text-balance"
+                style={
+                  { "--hover-color": accentColor } as React.CSSProperties
+                }
+              >
+                <span className="group-hover:text-[var(--hover-color)] transition-colors duration-300">
+                  {post.title}
+                </span>
+              </h2>
+
+              {/* Excerpt */}
+              {post.excerpt && (
+                <p className="mt-3 text-muted-foreground leading-relaxed">
+                  {post.excerpt}
+                </p>
+              )}
+
+              {/* Tags */}
+              {post.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs text-muted-foreground border border-border px-2 py-1 rounded"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </Link>
+          </article>
         )
       })}
     </div>
