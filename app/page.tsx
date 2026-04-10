@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
 import { PostList } from "@/components/post-list"
-import { FooterMist } from "@/components/ui/footer-mist"
 import type { Post } from "@/lib/types"
 
 export const revalidate = 60
@@ -16,8 +15,6 @@ export default async function HomePage() {
 
   return (
     <main className="relative min-h-screen">
-      <FooterMist />
-
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-8 md:py-12">
         <PostList posts={(posts as Post[]) || []} />
       </div>
