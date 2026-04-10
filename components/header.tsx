@@ -13,9 +13,11 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-4">
+          {/* Tea icon with subtle hover */}
           <Link
             href="/tea"
             className="text-lg hover:opacity-70 transition-opacity"
+            title="for us"
           >
             ☕
           </Link>
