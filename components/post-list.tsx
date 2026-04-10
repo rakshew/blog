@@ -30,7 +30,7 @@ export function PostList({ posts }: { posts: Post[] }) {
           <article key={post.id} className="group">
             <Link href={`/post/${post.slug}`} className="block">
               
-              {/* Date + dot */}
+              {/* Date */}
               <div className="flex items-center gap-3">
                 <span
                   className="w-2 h-2 rounded-full flex-shrink-0"
@@ -41,28 +41,26 @@ export function PostList({ posts }: { posts: Post[] }) {
                 </time>
               </div>
 
-              {/* Title */}
+              {/* Title — MATCHES "rakshi" */}
               <h2
-                className="font-serif text-[1.4rem] md:text-[1.6rem] mt-2 leading-snug transition-colors text-balance"
-                style={
-                  { "--hover-color": accentColor } as React.CSSProperties
-                }
+                className="font-serif text-2xl tracking-tight mt-2 transition-colors"
+                style={{ "--hover-color": accentColor } as React.CSSProperties}
               >
-                <span className="group-hover:text-[var(--hover-color)] transition-colors duration-300">
+                <span className="group-hover:text-[var(--hover-color)] transition-colors">
                   {post.title}
                 </span>
               </h2>
 
               {/* Excerpt */}
               {post.excerpt && (
-                <p className="mt-3 text-muted-foreground leading-relaxed">
+                <p className="mt-2 text-muted-foreground leading-relaxed">
                   {post.excerpt}
                 </p>
               )}
 
               {/* Tags */}
               {post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mt-3">
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
