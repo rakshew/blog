@@ -29,7 +29,7 @@ export default function WritePage() {
           </p>
 
           <p>
-            Let’s pen it!: <br />
+            Let’s pen it!(Commissions Open): <br />
             <a
               href="mailto:thecommongood10@gmail.com"
               className="underline underline-offset-4 hover:opacity-70 transition-opacity"
