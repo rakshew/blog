@@ -1,21 +1,28 @@
-// /app/tea/page.tsx
+"use client"
 
+import { useState } from "react"
 import Image from "next/image"
 
 export default function TeaPage() {
+  const [open, setOpen] = useState<string | null>(null)
+
+  const toggle = (key: string) => {
+    setOpen(open === key ? null : key)
+  }
+
   return (
-    <main className="max-w-2xl mx-auto px-6 py-16">
+    <main className="max-w-3xl mx-auto px-6 py-16 font-serif">
       <div className="space-y-10 text-center">
         <div className="space-y-2">
-          <h1 className="font-serif text-3xl leading-tight">
+          <h1 className="text-2xl leading-tight">
             டீ கடையில் நாம்
           </h1>
-          <p className="font-serif text-xl text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             A Cup Between Us
           </p>
         </div>
 
-        <div className="space-y-6 font-serif text-[1.45rem] leading-[1.9]">
+        <div className="space-y-6 text-[1.25rem] leading-[1.9]">
           <p>
             “Anna, two tea.” The stallowner moves without hurry, the kettle
             already humming somewhere behind the counter. The atmosphere is
@@ -26,55 +33,124 @@ export default function TeaPage() {
             on the wooden bench.
           </p>
 
-          <p className="text-2xl leading-relaxed">
+          <p className="text-xl">
             Would you come have tea with me?
           </p>
         </div>
 
-        <div className="grid gap-10 md:grid-cols-2 pt-4">
-          <div className="space-y-4">
-            <h2 className="font-serif text-2xl">Wise</h2>
-            <div className="flex justify-center">
-              <Image
-                src="/wise-qr.jpg"
-                alt="Wise QR code"
-                width={320}
-                height={320}
-                className="rounded-md object-contain"
-                priority
-              />
-            </div>
-            <a
-              href="https://wise.com/pay/me/rakshitam6"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block font-serif text-lg underline underline-offset-4 hover:opacity-70 transition-opacity"
+        {/* OPTIONS */}
+        <div className="space-y-4 pt-4 text-left">
+          
+          {/* WISE QR */}
+          <div>
+            <button
+              onClick={() => toggle("wise-qr")}
+              className="w-full text-left px-4 py-3 border border-border rounded-md hover:opacity-70 transition-opacity"
             >
-              Open Wise link
-            </a>
+              Wise QR code
+            </button>
+
+            {open === "wise-qr" && (
+              <div className="mt-4 flex justify-center">
+                <Image
+                  src="/wise-qr.jpg.jpg"
+                  alt="Wise QR"
+                  width={260}
+                  height={260}
+                  className="rounded-md"
+                />
+              </div>
+            )}
           </div>
 
-          <div className="space-y-4">
-            <h2 className="font-serif text-2xl">DBS PayLah!</h2>
-            <div className="flex justify-center">
-              <Image
-                src="/dbs-paylah-qr.jpg"
-                alt="DBS PayLah QR code"
-                width={320}
-                height={320}
-                className="rounded-md object-contain"
-                priority
-              />
-            </div>
-            <a
-              href="https://www.dbs.com.sg/personal/mobile/paylink/index.html?tranRef=eFosX2VWOd"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block font-serif text-lg underline underline-offset-4 hover:opacity-70 transition-opacity"
+          {/* DBS QR */}
+          <div>
+            <button
+              onClick={() => toggle("dbs-qr")}
+              className="w-full text-left px-4 py-3 border border-border rounded-md hover:opacity-70 transition-opacity"
             >
-              Open DBS PayLah link
-            </a>
+              DBS QR code
+            </button>
+
+            {open === "dbs-qr" && (
+              <div className="mt-4 flex justify-center">
+                <Image
+                  src="/dbs-paylah-qr.jpg.jpg"
+                  alt="DBS QR"
+                  width={260}
+                  height={260}
+                  className="rounded-md"
+                />
+              </div>
+            )}
           </div>
+
+          {/* OCBC QR */}
+          <div>
+            <button
+              onClick={() => toggle("ocbc-qr")}
+              className="w-full text-left px-4 py-3 border border-border rounded-md hover:opacity-70 transition-opacity"
+            >
+              OCBC QR code
+            </button>
+
+            {open === "ocbc-qr" && (
+              <div className="mt-4 flex justify-center">
+                <Image
+                  src="/ocbc-qr.jpg.jpg"
+                  alt="OCBC QR"
+                  width={260}
+                  height={260}
+                  className="rounded-md"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* DBS LINK */}
+          <div>
+            <button
+              onClick={() => toggle("dbs-link")}
+              className="w-full text-left px-4 py-3 border border-border rounded-md hover:opacity-70 transition-opacity"
+            >
+              DBS payment link
+            </button>
+
+            {open === "dbs-link" && (
+              <div className="mt-4 text-center">
+                <a
+                  href="https://www.dbs.com.sg/personal/mobile/paylink/index.html?tranRef=eFosX2VWOd"
+                  target="_blank"
+                  className="underline"
+                >
+                  Open DBS PayLah
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* WISE LINK */}
+          <div>
+            <button
+              onClick={() => toggle("wise-link")}
+              className="w-full text-left px-4 py-3 border border-border rounded-md hover:opacity-70 transition-opacity"
+            >
+              Wise payment link
+            </button>
+
+            {open === "wise-link" && (
+              <div className="mt-4 text-center">
+                <a
+                  href="https://wise.com/pay/me/rakshitam6"
+                  target="_blank"
+                  className="underline"
+                >
+                  Open Wise
+                </a>
+              </div>
+            )}
+          </div>
+
         </div>
       </div>
     </main>
