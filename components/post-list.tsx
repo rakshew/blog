@@ -29,21 +29,18 @@ export function PostList({ posts }: { posts: Post[] }) {
         return (
           <article key={post.id} className="group">
             <Link href={`/post/${post.slug}`} className="block">
-              
-              {/* Date */}
               <div className="flex items-center gap-3">
                 <span
                   className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{ backgroundColor: accentColor }}
                 />
-                <time className="text-sm text-muted-foreground">
+                <time className="post-list-meta text-sm text-muted-foreground">
                   {formatDate(post.published_at || post.created_at)}
                 </time>
               </div>
 
-              {/* Title — MATCHES "rakshi" */}
               <h2
-                className="font-serif text-2xl tracking-tight mt-2 transition-colors"
+                className="post-list-title font-serif text-[1.55rem] tracking-tight mt-2 leading-snug transition-colors"
                 style={{ "--hover-color": accentColor } as React.CSSProperties}
               >
                 <span className="group-hover:text-[var(--hover-color)] transition-colors">
@@ -51,14 +48,12 @@ export function PostList({ posts }: { posts: Post[] }) {
                 </span>
               </h2>
 
-              {/* Excerpt */}
               {post.excerpt && (
-                <p className="mt-2 text-muted-foreground leading-relaxed">
+                <p className="post-list-excerpt mt-2 text-muted-foreground leading-relaxed">
                   {post.excerpt}
                 </p>
               )}
 
-              {/* Tags */}
               {post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {post.tags.map((tag) => (
