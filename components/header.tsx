@@ -26,7 +26,7 @@ export function Header() {
             className="text-lg hover:opacity-70 transition-opacity"
             title="for a line"
           >
-            ✿
+            🌹
           </Link>
 
           <ThemeToggle />
