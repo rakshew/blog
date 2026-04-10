@@ -63,13 +63,11 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <article className="max-w-2xl mx-auto px-6 py-8 md:py-12">
-      {/* Accent line */}
       <div
         className="w-full h-1 rounded-full mb-8"
         style={{ backgroundColor: accentColor }}
       />
 
-      {/* Back link */}
       <Link
         href="/"
         className="text-sm text-muted-foreground inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
@@ -90,7 +88,6 @@ export default async function PostPage({ params }: Props) {
         Back
       </Link>
 
-      {/* Header */}
       <header className="mt-8">
         <time className="text-sm text-muted-foreground">
           {formatDate(typedPost.published_at || typedPost.created_at)}
@@ -114,17 +111,18 @@ export default async function PostPage({ params }: Props) {
         )}
       </header>
 
-      {/* Content */}
-      <div
-        className={`mt-10 prose prose-neutral dark:prose-invert max-w-none ${
-          typedPost.is_poetry
-            ? "font-serif text-lg leading-loose"
-            : "text-lg leading-relaxed"
-        }`}
-        dangerouslySetInnerHTML={{
-          __html: typedPost.content,
-        }}
-      />
+      {typedPost.is_poetry ? (
+        <div className="mt-10 font-serif text-lg leading-loose whitespace-pre-line">
+          {typedPost.content}
+        </div>
+      ) : (
+        <div
+          className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed"
+          dangerouslySetInnerHTML={{
+            __html: typedPost.content,
+          }}
+        />
+      )}
     </article>
   )
 }
