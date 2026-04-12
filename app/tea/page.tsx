@@ -24,7 +24,7 @@ export default function TeaPage() {
           <p>
             “<em>Anna</em>, two tea.” The stallowner moves without hurry, the
             kettle already humming somewhere behind the counter. The atmosphere
-            is calmer now, a relief from the blazing sun, filled with the sweet
+            is cooler here, a relief from the blazing sun, filled with the sweet
             aroma of sugar and milk stirred with shrunken tea leaves. The tea is
             poured into tumblers with immediacy, the scent of spices wafting
             through the air, the cups warm in the hand, with a quiet spot found
