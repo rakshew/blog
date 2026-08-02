@@ -23,11 +23,11 @@ export default function TeaPage() {
         <div className="space-y-6 text-[1.2rem] leading-[1.9]">
           <p>
             “<em>Anna</em>, two tea.” The stallowner moves without hurry, the
-            kettle already humming somewhere behind the counter. The atmosphere
+            kettle already humming behind the counter. The atmosphere
             is cooler here, a relief from the blazing sun, filled with the sweet
             aroma of sugar and milk stirred with shrunken tea leaves. The tea is
             poured into tumblers with immediacy, the scent of spices wafting
-            through the air, the cups warm in the hand, with a quiet spot found
+            through the air, with the cups warm in our hands, on a quiet spot found
             on the wooden bench.
           </p>
 
