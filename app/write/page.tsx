@@ -17,11 +17,11 @@ export default function WritePage() {
         <div className="space-y-8 text-[1.2rem] leading-[1.9]">
           
           <p>
-            Maybe it was the first time you tried to say something and stopped halfway, the words catching somewhere between your throat and your breath.
+            Maybe it was the first time you tried to say something and stopped halfway, the words catching between your throat and your breath.
           </p>
 
           <p>
-            Or perhaps it was a quiet evening, when everything had settled, but the fervour in you had not. A thought kept returning, not loud enough to disturb you, but not willing to leave either. It stayed, turning over itself, tugging at you to be uttered.
+            Or perhaps it was a quiet evening, when everything had settled, but the fervour in you had not. A thought kept returning, not willing to leave. It stayed, tugging at you to be uttered.
           </p>
 
           <p>
