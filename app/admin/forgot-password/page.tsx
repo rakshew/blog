@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
         email,
         redirectTo,
       })
-      
+
       setSuccess(true)
       setEmail("")
     } catch (err) {
