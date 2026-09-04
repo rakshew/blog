@@ -5,5 +5,8 @@ export default auth.middleware({
 })
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/admin",
+    "/admin/((?!login|forgot-password|reset-password).*)",
+  ],
 }
