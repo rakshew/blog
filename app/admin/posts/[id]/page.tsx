@@ -1,8 +1,11 @@
-import { createClient } from "@/lib/supabase/server"
+import { auth } from "@/lib/auth/server"
+import { sql } from "@/lib/db"
 import { redirect, notFound } from "next/navigation"
 import Link from "next/link"
 import { PostForm } from "@/components/admin/post-form"
 import type { Post } from "@/lib/types"
+
+export const dynamic = "force-dynamic"
 
 type Props = {
   params: Promise<{ id: string }>
@@ -10,21 +13,25 @@ type Props = {
 
 export default async function EditPostPage({ params }: Props) {
   const { id } = await params
-  const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data: session } = await auth.getSession()
 
-  if (!user) {
+  if (!session?.user) {
     redirect("/admin/login")
   }
 
-  const { data: post } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("id", id)
-    .single()
+  if (session.user.role !== "admin") {
+    redirect("/")
+  }
+
+  const rows = await sql`
+    SELECT *
+    FROM public.posts
+    WHERE id = ${id}
+    LIMIT 1
+  `
+
+  const post = rows[0] as Post | undefined
 
   if (!post) {
     notFound()
@@ -50,11 +57,14 @@ export default async function EditPostPage({ params }: Props) {
           >
             <path d="m15 18-6-6 6-6" />
           </svg>
+
           Back to posts
         </Link>
+
         <h1 className="font-serif text-3xl mt-4">Edit Post</h1>
       </div>
-      <PostForm post={post as Post} />
+
+      <PostForm post={post} />
     </div>
   )
 }

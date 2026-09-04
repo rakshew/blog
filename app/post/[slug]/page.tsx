@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { sql } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ACCENT_COLORS, type Post } from "@/lib/types"
@@ -10,18 +10,22 @@ type Props = {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
   const { slug } = await params
-  const supabase = await createClient()
 
-  const { data: post, error } = await supabase
-    .from("posts")
-    .select("title, excerpt")
-    .eq("slug", slug)
-    .eq("status", "published")
-    .single()
+  const rows = await sql`
+    SELECT title, excerpt
+    FROM public.posts
+    WHERE slug = ${slug}
+      AND status = 'published'
+    LIMIT 1
+  `
 
-  if (error || !post) {
+  const post = rows[0] as Pick<Post, "title" | "excerpt"> | undefined
+
+  if (!post) {
     return { title: "Post not found" }
   }
 
@@ -33,6 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 function formatDate(dateString: string) {
   const date = new Date(dateString)
+
   return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -46,22 +51,23 @@ function looksLikeHtml(content: string) {
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
-  const supabase = await createClient()
 
-  const { data: post, error } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("slug", slug)
-    .eq("status", "published")
-    .single()
+  const rows = await sql`
+    SELECT *
+    FROM public.posts
+    WHERE slug = ${slug}
+      AND status = 'published'
+    LIMIT 1
+  `
 
-  if (error || !post) {
+  const post = rows[0] as Post | undefined
+
+  if (!post) {
     notFound()
   }
 
-  const typedPost = post as Post
   const accentColor =
-    ACCENT_COLORS.find((c) => c.value === typedPost.accent)?.color ||
+    ACCENT_COLORS.find((c) => c.value === post.accent)?.color ||
     ACCENT_COLORS[0].color
 
   return (
@@ -93,16 +99,16 @@ export default async function PostPage({ params }: Props) {
 
       <header className="mt-8">
         <time className="text-sm text-muted-foreground">
-          {formatDate(typedPost.published_at || typedPost.created_at)}
+          {formatDate(post.published_at || post.created_at)}
         </time>
 
         <h1 className="font-serif text-2xl md:text-3xl mt-3 leading-tight text-balance">
-          {typedPost.title}
+          {post.title}
         </h1>
 
-        {typedPost.tags?.length > 0 && (
+        {post.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
-            {typedPost.tags.map((tag) => (
+            {post.tags.map((tag) => (
               <span
                 key={tag}
                 className="text-xs text-muted-foreground border border-border px-2 py-1 rounded"
@@ -114,24 +120,24 @@ export default async function PostPage({ params }: Props) {
         )}
       </header>
 
-      {typedPost.is_poetry ? (
-        looksLikeHtml(typedPost.content) ? (
+      {post.is_poetry ? (
+        looksLikeHtml(post.content) ? (
           <div
             className="mt-10 font-serif text-lg leading-loose"
-            dangerouslySetInnerHTML={{ __html: typedPost.content }}
+            dangerouslySetInnerHTML={{ __html: post.content }}
           />
         ) : (
           <div className="mt-10 font-serif text-lg leading-loose whitespace-pre-line">
-            {typedPost.content}
+            {post.content}
           </div>
         )
       ) : (
         <div
           className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed"
           dangerouslySetInnerHTML={{
-            __html: looksLikeHtml(typedPost.content)
-              ? typedPost.content
-              : typedPost.content
+            __html: looksLikeHtml(post.content)
+              ? post.content
+              : post.content
                   .split("\n\n")
                   .map((p) => `<p>${p}</p>`)
                   .join(""),

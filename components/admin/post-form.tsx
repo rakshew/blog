@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
 import { ACCENT_COLORS, type Post, type AccentColor } from "@/lib/types"
 
 interface PostFormProps {
@@ -60,8 +59,6 @@ export function PostForm({ post }: PostFormProps) {
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-
     const postData = {
       title,
       slug,
@@ -77,31 +74,31 @@ export function PostForm({ post }: PostFormProps) {
       published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
     }
 
-    if (post) {
-      const { error: updateError } = await supabase
-        .from("posts")
-        .update(postData)
-        .eq("id", post.id)
+    try {
+      const url = post ? `/api/admin/posts/${post.id}` : "/api/admin/posts"
+      const method = post ? "PATCH" : "POST"
 
-      if (updateError) {
-        setError(updateError.message)
-        setLoading(false)
-        return
-      }
-    } else {
-      const { error: insertError } = await supabase
-        .from("posts")
-        .insert(postData)
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      })
 
-      if (insertError) {
-        setError(insertError.message)
-        setLoading(false)
-        return
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || `Failed to ${post ? "update" : "create"} post`)
       }
+
+      router.push("/admin")
+      router.refresh()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error occurred"
+      setError(message)
+      console.error("Post submission error:", err)
+      setLoading(false)
     }
-
-    router.push("/admin")
-    router.refresh()
   }
 
   return (

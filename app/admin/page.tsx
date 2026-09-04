@@ -1,32 +1,37 @@
-import { createClient } from "@/lib/supabase/server"
+import { auth } from "@/lib/auth/server"
+import { sql } from "@/lib/db"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { ACCENT_COLORS, type Post } from "@/lib/types"
 import { DeletePostButton } from "@/components/admin/delete-post-button"
 import { LogoutButton } from "@/components/admin/logout-button"
 
+export const dynamic = "force-dynamic"
+
 export default async function AdminPage() {
-  const supabase = await createClient()
+  const { data: session } = await auth.getSession()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
+  if (!session?.user) {
     redirect("/admin/login")
   }
 
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false })
+  if (session.user.role !== "admin") {
+    redirect("/")
+  }
 
-  const typedPosts = (posts as Post[]) || []
+  const posts = await sql`
+    SELECT *
+    FROM public.posts
+    ORDER BY created_at DESC
+  `
+
+  const typedPosts = posts as Post[]
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-serif text-3xl">Posts</h1>
+
         <div className="flex items-center gap-4">
           <Link
             href="/admin/posts/new"
@@ -59,10 +64,23 @@ export default async function AdminPage() {
                 <div className="flex items-center gap-3">
                   <span
                     className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: ACCENT_COLORS.find((c) => c.value === post.accent)?.color || ACCENT_COLORS[0].color }}
-                    title={ACCENT_COLORS.find((c) => c.value === post.accent)?.label || 'Coral'}
+                    style={{
+                      backgroundColor:
+                        ACCENT_COLORS.find(
+                          (c) => c.value === post.accent
+                        )?.color || ACCENT_COLORS[0].color,
+                    }}
+                    title={
+                      ACCENT_COLORS.find(
+                        (c) => c.value === post.accent
+                      )?.label || "Coral"
+                    }
                   />
-                  <h2 className="font-medium truncate">{post.title}</h2>
+
+                  <h2 className="font-medium truncate">
+                    {post.title}
+                  </h2>
+
                   <span
                     className={`text-xs px-2 py-0.5 rounded ${
                       post.status === "published"
@@ -73,10 +91,12 @@ export default async function AdminPage() {
                     {post.status}
                   </span>
                 </div>
+
                 <p className="text-sm text-muted-foreground mt-1">
                   /{post.slug}
                 </p>
               </div>
+
               <div className="flex items-center gap-2 ml-4">
                 <Link
                   href={`/admin/posts/${post.id}`}
@@ -84,7 +104,11 @@ export default async function AdminPage() {
                 >
                   Edit
                 </Link>
-                <DeletePostButton postId={post.id} postTitle={post.title} />
+
+                <DeletePostButton
+                  postId={post.id}
+                  postTitle={post.title}
+                />
               </div>
             </div>
           ))}

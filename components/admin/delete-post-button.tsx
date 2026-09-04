@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
 
 interface DeletePostButtonProps {
   postId: string
@@ -12,6 +11,7 @@ interface DeletePostButtonProps {
 export function DeletePostButton({ postId, postTitle }: DeletePostButtonProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete "${postTitle}"?`)) {
@@ -19,20 +19,42 @@ export function DeletePostButton({ postId, postTitle }: DeletePostButtonProps) {
     }
 
     setLoading(true)
-    const supabase = createClient()
+    setError(null)
 
-    await supabase.from("posts").delete().eq("id", postId)
+    try {
+      const response = await fetch(`/api/admin/posts/${postId}`, {
+        method: "DELETE",
+      })
 
-    router.refresh()
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to delete post")
+      }
+
+      router.refresh()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error occurred"
+      setError(message)
+      console.error("Delete error:", err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <button
-      onClick={handleDelete}
-      disabled={loading}
-      className="text-sm text-destructive hover:text-destructive/80 transition-colors px-3 py-1 disabled:opacity-50"
-    >
-      {loading ? "..." : "Delete"}
-    </button>
+    <>
+      <button
+        onClick={handleDelete}
+        disabled={loading}
+        className="text-sm text-destructive hover:text-destructive/80 transition-colors px-3 py-1 disabled:opacity-50"
+      >
+        {loading ? "..." : "Delete"}
+      </button>
+      {error && (
+        <div className="text-sm text-destructive mt-2">
+          {error}
+        </div>
+      )}
+    </>
   )
 }

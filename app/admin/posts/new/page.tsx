@@ -1,17 +1,19 @@
-import { createClient } from "@/lib/supabase/server"
+import { auth } from "@/lib/auth/server"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { PostForm } from "@/components/admin/post-form"
 
+export const dynamic = "force-dynamic"
+
 export default async function NewPostPage() {
-  const supabase = await createClient()
+  const { data: session } = await auth.getSession()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
+  if (!session?.user) {
     redirect("/admin/login")
+  }
+
+  if (session.user.role !== "admin") {
+    redirect("/")
   }
 
   return (
@@ -36,8 +38,10 @@ export default async function NewPostPage() {
           </svg>
           Back to posts
         </Link>
+
         <h1 className="font-serif text-3xl mt-4">New Post</h1>
       </div>
+
       <PostForm />
     </div>
   )

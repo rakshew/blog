@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { authClient } from "@/lib/auth/client"
 import Link from "next/link"
 
 export default function LoginPage() {
   const router = useRouter()
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -17,15 +18,13 @@ export default function LoginPage() {
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-
-    const { error: authError } = await supabase.auth.signInWithPassword({
+    const { error: authError } = await authClient.signIn.email({
       email,
       password,
     })
 
     if (authError) {
-      setError(authError.message)
+      setError(authError.message || "Unable to sign in")
       setLoading(false)
       return
     }
@@ -66,6 +65,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
               className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
@@ -80,6 +80,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
               className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
