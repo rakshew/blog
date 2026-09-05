@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth/server"
-import { sql } from "@/lib/db"
+import { createPost } from "@/lib/api/posts"
 
 export async function POST(request: Request) {
   const { data: session } = await auth.getSession()
@@ -42,37 +42,21 @@ export async function POST(request: Request) {
       )
     }
 
-    const rows = await sql`
-      INSERT INTO public.posts (
-        title,
-        slug,
-        excerpt,
-        content,
-        tags,
-        status,
-        accent,
-        is_poetry,
-        published_at,
-        updated_at
-      )
-      VALUES (
-        ${title},
-        ${slug},
-        ${excerpt || null},
-        ${content},
-        ${tags || []},
-        ${status},
-        ${accent},
-        ${is_poetry},
-        ${published_at || null},
-        now()
-      )
-      RETURNING id
-    `
+    const post = await createPost({
+      title,
+      slug,
+      excerpt: excerpt || null,
+      content,
+      tags: tags || [],
+      status,
+      accent,
+      is_poetry,
+      published_at: published_at || null,
+    })
 
     return NextResponse.json({
       success: true,
-      id: rows[0].id,
+      id: post.id,
     })
   } catch (error) {
     console.error(error)

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth/server"
-import { sql } from "@/lib/db"
+import { deletePost, updatePost } from "@/lib/api/posts"
 
 type Props = {
   params: Promise<{ id: string }>
@@ -61,24 +61,19 @@ export async function PATCH(request: Request, { params }: Props) {
       )
     }
 
-    const rows = await sql`
-      UPDATE public.posts
-      SET
-        title = ${title},
-        slug = ${slug},
-        excerpt = ${excerpt || null},
-        content = ${content},
-        tags = ${tags || []},
-        status = ${status},
-        accent = ${accent},
-        is_poetry = ${is_poetry},
-        published_at = ${published_at || null},
-        updated_at = now()
-      WHERE id = ${id}
-      RETURNING id
-    `
+    const post = await updatePost(id, {
+      title,
+      slug,
+      excerpt: excerpt || null,
+      content,
+      tags: tags || [],
+      status,
+      accent,
+      is_poetry,
+      published_at: published_at || null,
+    })
 
-    if (rows.length === 0) {
+    if (!post) {
       return NextResponse.json(
         { error: "Post not found" },
         { status: 404 }
@@ -109,13 +104,9 @@ export async function DELETE(_request: Request, { params }: Props) {
   const { id } = await params
 
   try {
-    const rows = await sql`
-      DELETE FROM public.posts
-      WHERE id = ${id}
-      RETURNING id
-    `
+    const deletedId = await deletePost(id)
 
-    if (rows.length === 0) {
+    if (!deletedId) {
       return NextResponse.json(
         { error: "Post not found" },
         { status: 404 }

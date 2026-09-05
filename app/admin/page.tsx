@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth/server"
-import { sql } from "@/lib/db"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { ACCENT_COLORS, type Post } from "@/lib/types"
+import { ACCENT_COLORS } from "@/lib/types"
+import { getAllPosts } from "@/lib/api/posts"
 import { DeletePostButton } from "@/components/admin/delete-post-button"
 import { LogoutButton } from "@/components/admin/logout-button"
 
@@ -19,13 +19,7 @@ export default async function AdminPage() {
     redirect("/")
   }
 
-  const posts = await sql`
-    SELECT *
-    FROM public.posts
-    ORDER BY created_at DESC
-  `
-
-  const typedPosts = posts as Post[]
+  const typedPosts = await getAllPosts()
 
   return (
     <div>

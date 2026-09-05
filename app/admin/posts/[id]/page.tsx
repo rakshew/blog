@@ -1,9 +1,8 @@
 import { auth } from "@/lib/auth/server"
-import { sql } from "@/lib/db"
 import { redirect, notFound } from "next/navigation"
 import Link from "next/link"
 import { PostForm } from "@/components/admin/post-form"
-import type { Post } from "@/lib/types"
+import { getPostById } from "@/lib/api/posts"
 
 export const dynamic = "force-dynamic"
 
@@ -24,14 +23,7 @@ export default async function EditPostPage({ params }: Props) {
     redirect("/")
   }
 
-  const rows = await sql`
-    SELECT *
-    FROM public.posts
-    WHERE id = ${id}
-    LIMIT 1
-  `
-
-  const post = rows[0] as Post | undefined
+  const post = await getPostById(id)
 
   if (!post) {
     notFound()

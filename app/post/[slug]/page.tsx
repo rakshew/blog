@@ -1,7 +1,10 @@
-import { sql } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ACCENT_COLORS, type Post } from "@/lib/types"
+import { ACCENT_COLORS } from "@/lib/types"
+import {
+  getPublishedPostBySlug,
+  getPublishedPostMetadataBySlug,
+} from "@/lib/api/posts"
 import type { Metadata } from "next"
 
 export const revalidate = 0
@@ -15,15 +18,7 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = await params
 
-  const rows = await sql`
-    SELECT title, excerpt
-    FROM public.posts
-    WHERE slug = ${slug}
-      AND status = 'published'
-    LIMIT 1
-  `
-
-  const post = rows[0] as Pick<Post, "title" | "excerpt"> | undefined
+  const post = await getPublishedPostMetadataBySlug(slug)
 
   if (!post) {
     return { title: "Post not found" }
@@ -52,15 +47,7 @@ function looksLikeHtml(content: string) {
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
 
-  const rows = await sql`
-    SELECT *
-    FROM public.posts
-    WHERE slug = ${slug}
-      AND status = 'published'
-    LIMIT 1
-  `
-
-  const post = rows[0] as Post | undefined
+  const post = await getPublishedPostBySlug(slug)
 
   if (!post) {
     notFound()
