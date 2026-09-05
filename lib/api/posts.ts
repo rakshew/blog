@@ -13,6 +13,9 @@ export type PostInput = {
   accent: Post["accent"]
   is_poetry: boolean
   published_at: string | null
+  cover_image_url: string | null
+  cover_image_alt: string | null
+  cover_image_caption: string | null
 }
 
 export async function getPublishedPosts(): Promise<Post[]> {
@@ -20,7 +23,7 @@ export async function getPublishedPosts(): Promise<Post[]> {
     SELECT *
     FROM public.posts
     WHERE status = 'published'
-    ORDER BY published_at DESC NULLS LAST
+    ORDER BY COALESCE(published_at, created_at) DESC, created_at DESC
   `) as Post[]
 }
 
@@ -54,7 +57,7 @@ export async function getAllPosts(): Promise<Post[]> {
   return (await sql`
     SELECT *
     FROM public.posts
-    ORDER BY created_at DESC
+    ORDER BY COALESCE(published_at, created_at) DESC, created_at DESC
   `) as Post[]
 }
 
@@ -81,6 +84,9 @@ export async function createPost(data: PostInput): Promise<{ id: string }> {
       accent,
       is_poetry,
       published_at,
+      cover_image_url,
+      cover_image_alt,
+      cover_image_caption,
       updated_at
     )
     VALUES (
@@ -93,6 +99,9 @@ export async function createPost(data: PostInput): Promise<{ id: string }> {
       ${data.accent},
       ${data.is_poetry},
       ${data.published_at},
+      ${data.cover_image_url},
+      ${data.cover_image_alt},
+      ${data.cover_image_caption},
       now()
     )
     RETURNING id
@@ -117,12 +126,26 @@ export async function updatePost(
       accent = ${data.accent},
       is_poetry = ${data.is_poetry},
       published_at = ${data.published_at},
+      cover_image_url = ${data.cover_image_url},
+      cover_image_alt = ${data.cover_image_alt},
+      cover_image_caption = ${data.cover_image_caption},
       updated_at = now()
     WHERE id = ${id}
     RETURNING id
   `
 
   return rows.length > 0 ? (rows[0] as { id: string }) : null
+}
+
+export async function markNewsletterSent(id: string): Promise<boolean> {
+  const rows = await sql`
+    UPDATE public.posts
+    SET newsletter_sent_at = now(), updated_at = now()
+    WHERE id = ${id}
+    RETURNING id
+  `
+
+  return rows.length > 0
 }
 
 export async function deletePost(id: string): Promise<string | null> {

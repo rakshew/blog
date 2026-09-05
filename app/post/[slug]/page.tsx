@@ -6,6 +6,7 @@ import {
   getPublishedPostMetadataBySlug,
 } from "@/lib/api/posts"
 import type { Metadata } from "next"
+import { SubscribeForm } from "@/components/subscribe-form"
 
 export const revalidate = 0
 
@@ -107,6 +108,22 @@ export default async function PostPage({ params }: Props) {
         )}
       </header>
 
+      {post.cover_image_url && (
+        <figure className="mt-10">
+          <img
+            src={post.cover_image_url}
+            alt={post.cover_image_alt || post.title}
+            className="w-full h-auto rounded-md object-cover"
+            decoding="async"
+          />
+          {post.cover_image_caption && (
+            <figcaption className="mt-2 text-sm text-muted-foreground">
+              {post.cover_image_caption}
+            </figcaption>
+          )}
+        </figure>
+      )}
+
       {post.is_poetry ? (
         looksLikeHtml(post.content) ? (
           <div
@@ -114,23 +131,22 @@ export default async function PostPage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         ) : (
-          <div className="mt-10 font-serif text-lg leading-loose whitespace-pre-line">
+          <div className="mt-10 font-serif text-lg leading-loose whitespace-pre-wrap">
             {post.content}
           </div>
         )
       ) : (
-        <div
-          className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed"
-          dangerouslySetInnerHTML={{
-            __html: looksLikeHtml(post.content)
-              ? post.content
-              : post.content
-                  .split("\n\n")
-                  .map((p) => `<p>${p}</p>`)
-                  .join(""),
-          }}
-        />
+        looksLikeHtml(post.content) ? (
+          <div className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: post.content }} />
+        ) : (
+          <div className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed whitespace-pre-wrap break-words">
+            {post.content}
+          </div>
+        )
       )}
+      <div className="mt-16">
+        <SubscribeForm />
+      </div>
     </article>
   )
 }

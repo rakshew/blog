@@ -39,6 +39,11 @@ export function PostForm({ post }: PostFormProps) {
   const [publishedAt, setPublishedAt] = useState(
     post?.published_at ? formatForDatetimeLocal(post.published_at) : ""
   )
+  const [coverImageUrl, setCoverImageUrl] = useState(post?.cover_image_url || "")
+  const [coverImageAlt, setCoverImageAlt] = useState(post?.cover_image_alt || "")
+  const [coverImageCaption, setCoverImageCaption] = useState(post?.cover_image_caption || "")
+  const [imageUploading, setImageUploading] = useState(false)
+  const [imageError, setImageError] = useState<string | null>(null)
 
   const generateSlug = (text: string) => {
     return text
@@ -72,6 +77,9 @@ export function PostForm({ post }: PostFormProps) {
       accent,
       is_poetry: isPoetry,
       published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
+      cover_image_url: coverImageUrl || null,
+      cover_image_alt: coverImageAlt || null,
+      cover_image_caption: coverImageCaption || null,
     }
 
     try {
@@ -98,6 +106,43 @@ export function PostForm({ post }: PostFormProps) {
       setError(message)
       console.error("Post submission error:", err)
       setLoading(false)
+    }
+  }
+
+  async function handleImageChange(file: File | undefined) {
+    if (!file) return
+    setImageError(null)
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"]
+    if (!allowedTypes.includes(file.type)) {
+      setImageError("Use a JPEG, PNG, WebP, or AVIF image.")
+      return
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      setImageError("Images must be 8 MB or smaller.")
+      return
+    }
+
+    setImageUploading(true)
+    try {
+      const presignResponse = await fetch("/api/admin/images/presign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: file.type, size: file.size }),
+      })
+      const presign = await presignResponse.json()
+      if (!presignResponse.ok) throw new Error(presign.error || "Unable to prepare image upload")
+
+      const uploadResponse = await fetch(presign.uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      })
+      if (!uploadResponse.ok) throw new Error("Image upload failed")
+      setCoverImageUrl(presign.publicUrl)
+    } catch (uploadError) {
+      setImageError(uploadError instanceof Error ? uploadError.message : "Image upload failed")
+    } finally {
+      setImageUploading(false)
     }
   }
 
@@ -215,6 +260,30 @@ export function PostForm({ post }: PostFormProps) {
           placeholder="tech, thoughts, life"
           className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
         />
+      </div>
+
+      <div className="space-y-4 border-t border-border pt-6">
+        <h2 className="text-sm font-medium">Cover image</h2>
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/avif"
+          onChange={(event) => handleImageChange(event.target.files?.[0])}
+          disabled={imageUploading}
+          className="block w-full text-sm"
+        />
+        {imageUploading && <p className="text-sm text-muted-foreground">Uploading...</p>}
+        {imageError && <p className="text-sm text-destructive">{imageError}</p>}
+        {coverImageUrl && (
+          <div className="space-y-3">
+            <img src={coverImageUrl} alt={coverImageAlt || "Cover preview"} className="max-h-64 w-full rounded-md object-cover" />
+            <div className="flex flex-wrap gap-3">
+              <button type="button" onClick={() => navigator.clipboard.writeText(coverImageUrl)} className="text-sm text-muted-foreground hover:text-foreground">Copy Image URL</button>
+              <button type="button" onClick={() => { setCoverImageUrl(""); setCoverImageAlt(""); setCoverImageCaption("") }} className="text-sm text-destructive">Remove Image</button>
+            </div>
+            <input aria-label="Image alt text" value={coverImageAlt} onChange={(event) => setCoverImageAlt(event.target.value)} placeholder="Alt text" className="w-full px-3 py-2 border border-input rounded-md bg-background" />
+            <input aria-label="Image caption" value={coverImageCaption} onChange={(event) => setCoverImageCaption(event.target.value)} placeholder="Caption" className="w-full px-3 py-2 border border-input rounded-md bg-background" />
+          </div>
+        )}
       </div>
 
       <div className="space-y-2">

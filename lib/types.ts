@@ -22,4 +22,8 @@ export interface Post {
   created_at: string
   updated_at: string
   published_at: string | null
+  cover_image_url: string | null
+  cover_image_alt: string | null
+  cover_image_caption: string | null
+  newsletter_sent_at: string | null
 }

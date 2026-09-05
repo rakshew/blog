@@ -29,6 +29,15 @@ export function PostList({ posts }: { posts: Post[] }) {
         return (
           <article key={post.id} className="group">
             <Link href={`/post/${post.slug}`} className="block">
+              {post.cover_image_url && (
+                <img
+                  src={post.cover_image_url}
+                  alt={post.cover_image_alt || post.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-auto rounded-md object-cover mb-4"
+                />
+              )}
               <div className="flex items-center gap-3">
                 <span
                   className="w-2 h-2 rounded-full flex-shrink-0"

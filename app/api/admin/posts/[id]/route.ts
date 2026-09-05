@@ -45,6 +45,9 @@ export async function PATCH(request: Request, { params }: Props) {
       accent,
       is_poetry,
       published_at,
+      cover_image_url,
+      cover_image_alt,
+      cover_image_caption,
     } = body
 
     if (!title || !slug || !content) {
@@ -71,6 +74,9 @@ export async function PATCH(request: Request, { params }: Props) {
       accent,
       is_poetry,
       published_at: published_at || null,
+      cover_image_url: cover_image_url || null,
+      cover_image_alt: cover_image_alt || null,
+      cover_image_caption: cover_image_caption || null,
     })
 
     if (!post) {

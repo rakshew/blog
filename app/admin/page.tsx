@@ -5,6 +5,7 @@ import { ACCENT_COLORS } from "@/lib/types"
 import { getAllPosts } from "@/lib/api/posts"
 import { DeletePostButton } from "@/components/admin/delete-post-button"
 import { LogoutButton } from "@/components/admin/logout-button"
+import { SendNewsletterButton } from "@/components/admin/send-newsletter-button"
 
 export const dynamic = "force-dynamic"
 
@@ -98,6 +99,13 @@ export default async function AdminPage() {
                 >
                   Edit
                 </Link>
+
+                {post.status === "published" && (
+                  <SendNewsletterButton
+                    postId={post.id}
+                    sentAt={post.newsletter_sent_at}
+                  />
+                )}
 
                 <DeletePostButton
                   postId={post.id}
