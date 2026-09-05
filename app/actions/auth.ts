@@ -1,6 +1,7 @@
 "use server"
 
 import { auth } from "@/lib/auth/server"
+import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 type AuthResult = { error?: string }
@@ -29,6 +30,16 @@ function getAuthMessage(error: unknown) {
   return value?.message || "Authentication failed"
 }
 
+async function logAuthRequestOrigin() {
+  const requestHeaders = await headers()
+  console.error("Neon auth request origin diagnostic", {
+    origin: requestHeaders.get("origin"),
+    host: requestHeaders.get("host"),
+    forwardedHost: requestHeaders.get("x-forwarded-host"),
+    forwardedProto: requestHeaders.get("x-forwarded-proto"),
+  })
+}
+
 export async function signInAction({
   email,
   password,
@@ -45,6 +56,7 @@ export async function signInAction({
   }
 
   try {
+    await logAuthRequestOrigin()
     const result = await auth.signIn.email({ email, password })
     if (result.error) {
       console.error("Neon Auth error", { operation, ...describeAuthError(result.error) })
@@ -68,6 +80,7 @@ export async function signUpAction({
   password: string
 }): Promise<AuthResult> {
   try {
+    await logAuthRequestOrigin()
     const result = await auth.signUp.email({ name, email, password })
     if (result.error) {
       console.error("Neon Auth error", { operation: "sign-up", ...describeAuthError(result.error) })
