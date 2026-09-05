@@ -1,11 +1,13 @@
-"use client"
-
 import Link from "next/link"
 import { ThemeToggle } from "./theme-toggle"
 import { AccessibilityToggle } from "./accessibility-toggle"
 import { PenLine, MessageCircleHeart } from "lucide-react"
+import { auth } from "@/lib/auth/server"
+import { AccountControl } from "@/components/auth/account-control"
 
-export function Header() {
+export async function Header() {
+  const { data: session } = await auth.getSession()
+
   return (
     <header className="py-8 md:py-12">
       <div className="max-w-2xl mx-auto px-6 flex items-center justify-between">
@@ -41,6 +43,21 @@ export function Header() {
 
           <AccessibilityToggle />
           <ThemeToggle />
+          {session?.user ? (
+            <>
+              {session.user.role === "admin" && (
+                <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Admin
+                </Link>
+              )}
+              <AccountControl label={session.user.name || session.user.email} />
+            </>
+          ) : (
+            <div className="flex items-center gap-3 text-sm">
+              <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">Sign in</Link>
+              <Link href="/signup" className="text-muted-foreground hover:text-foreground transition-colors">Create account</Link>
+            </div>
+          )}
         </div>
       </div>
     </header>

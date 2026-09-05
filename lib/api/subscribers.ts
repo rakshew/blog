@@ -19,16 +19,27 @@ export function isValidEmail(email: string) {
 
 export async function requestSubscription(input: string): Promise<{ subscriber: Subscriber | null; shouldSend: boolean }> {
   const email = normalizeEmail(input)
-  const rows = await sql`SELECT * FROM public.subscribers WHERE lower(email) = ${email} LIMIT 1`
-  const existing = rows[0] as (Subscriber & { status: string }) | undefined
+  const created = await sql`
+    INSERT INTO public.subscribers (email)
+    VALUES (${email})
+    ON CONFLICT (lower(email)) DO NOTHING
+    RETURNING id, email, confirmation_token, unsubscribe_token
+  `
+
+  if (created.length > 0) {
+    return { subscriber: created[0] as Subscriber, shouldSend: true }
+  }
+
+  const rows = await sql`
+    SELECT id, email, status
+    FROM public.subscribers
+    WHERE lower(email) = ${email}
+    LIMIT 1
+  `
+  const existing = rows[0] as { id: string; email: string; status: string } | undefined
 
   if (!existing) {
-    const created = await sql`
-      INSERT INTO public.subscribers (email)
-      VALUES (${email})
-      RETURNING id, email, confirmation_token, unsubscribe_token
-    `
-    return { subscriber: created[0] as Subscriber, shouldSend: true }
+    throw new Error("Subscriber was not created")
   }
 
   if (existing.status === "active") return { subscriber: null, shouldSend: false }

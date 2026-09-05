@@ -1,13 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { authClient } from "@/lib/auth/client"
 import Link from "next/link"
+import { signInAction } from "@/app/actions/auth"
 
 export default function LoginPage() {
-  const router = useRouter()
-
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -18,19 +15,17 @@ export default function LoginPage() {
     setLoading(true)
     setError(null)
 
-    const { error: authError } = await authClient.signIn.email({
+    const result = await signInAction({
       email,
       password,
+      destination: "/admin",
+      operation: "admin-sign-in",
     })
 
-    if (authError) {
-      setError(authError.message || "Unable to sign in")
+    if (result.error) {
+      setError(result.error)
       setLoading(false)
-      return
     }
-
-    router.push("/admin")
-    router.refresh()
   }
 
   return (
@@ -46,6 +41,9 @@ export default function LoginPage() {
           <p className="text-sm text-muted-foreground mt-2">
             Sign in to admin dashboard
           </p>
+          <Link href="/login" className="text-xs text-primary hover:underline">
+            Reader login
+          </Link>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
