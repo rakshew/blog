@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth/server"
 import { createPost } from "@/lib/api/posts"
+import { isHttpsUrl } from "@/lib/content/inline-images"
 
 export async function POST(request: Request) {
   const { data: session } = await auth.getSession()
@@ -29,6 +30,7 @@ export async function POST(request: Request) {
       cover_image_url,
       cover_image_alt,
       cover_image_caption,
+      email_preview,
     } = body
 
     if (!title || !slug || !content) {
@@ -45,6 +47,10 @@ export async function POST(request: Request) {
       )
     }
 
+    if (cover_image_url && !isHttpsUrl(cover_image_url)) {
+      return NextResponse.json({ error: "Cover image URL must use HTTPS" }, { status: 400 })
+    }
+
     const post = await createPost({
       title,
       slug,
@@ -58,6 +64,7 @@ export async function POST(request: Request) {
       cover_image_url: cover_image_url || null,
       cover_image_alt: cover_image_alt || null,
       cover_image_caption: cover_image_caption || null,
+      email_preview: email_preview || null,
     })
 
     return NextResponse.json({

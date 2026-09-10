@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ACCENT_COLORS, type Post, type AccentColor } from "@/lib/types"
+import { isHttpsUrl } from "@/lib/content/inline-images"
+import { RichPostEditor } from "@/components/admin/rich-post-editor"
 
 interface PostFormProps {
   post?: Post
@@ -42,6 +44,7 @@ export function PostForm({ post }: PostFormProps) {
   const [coverImageUrl, setCoverImageUrl] = useState(post?.cover_image_url || "")
   const [coverImageAlt, setCoverImageAlt] = useState(post?.cover_image_alt || "")
   const [coverImageCaption, setCoverImageCaption] = useState(post?.cover_image_caption || "")
+  const [emailPreview, setEmailPreview] = useState(post?.email_preview || "")
   const [imageUploading, setImageUploading] = useState(false)
   const [imageError, setImageError] = useState<string | null>(null)
 
@@ -61,6 +64,10 @@ export function PostForm({ post }: PostFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (coverImageUrl && !isHttpsUrl(coverImageUrl)) {
+      setError("Cover image URL must use HTTPS.")
+      return
+    }
     setLoading(true)
     setError(null)
 
@@ -80,6 +87,7 @@ export function PostForm({ post }: PostFormProps) {
       cover_image_url: coverImageUrl || null,
       cover_image_alt: coverImageAlt || null,
       cover_image_caption: coverImageCaption || null,
+      email_preview: emailPreview || null,
     }
 
     try {
@@ -226,21 +234,7 @@ export function PostForm({ post }: PostFormProps) {
             <span className="text-sm text-muted-foreground">Poetry mode</span>
           </label>
         </div>
-        <textarea
-          id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-          rows={12}
-          className={`w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-y text-sm ${
-            isPoetry ? "font-serif leading-relaxed" : "font-mono"
-          }`}
-          placeholder={
-            isPoetry
-              ? "Write your poetry here...\nLine breaks will be preserved."
-              : ""
-          }
-        />
+        <RichPostEditor value={content} onChange={setContent} />
         {isPoetry && (
           <p className="text-xs text-muted-foreground">
             Poetry mode preserves line breaks and uses serif typography.
@@ -284,6 +278,28 @@ export function PostForm({ post }: PostFormProps) {
             <input aria-label="Image caption" value={coverImageCaption} onChange={(event) => setCoverImageCaption(event.target.value)} placeholder="Caption" className="w-full px-3 py-2 border border-input rounded-md bg-background" />
           </div>
         )}
+        <input
+          aria-label="Cover image URL"
+          type="url"
+          value={coverImageUrl}
+          onChange={(event) => setCoverImageUrl(event.target.value)}
+          placeholder="Or paste an HTTPS image URL"
+          className="w-full px-3 py-2 border border-input rounded-md bg-background"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="email_preview" className="text-sm font-medium">
+          Email preview
+        </label>
+        <textarea
+          id="email_preview"
+          value={emailPreview}
+          onChange={(event) => setEmailPreview(event.target.value)}
+          rows={5}
+          placeholder="Optional excerpt to send with the post email"
+          className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-y"
+        />
       </div>
 
       <div className="space-y-2">

@@ -15,10 +15,8 @@ export async function POST(_request: Request, { params }: Props) {
   const post = await getPostById(id)
   if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 })
   if (post.status !== "published") return NextResponse.json({ error: "Only published posts can be emailed" }, { status: 400 })
-  if (post.newsletter_sent_at) return NextResponse.json({ error: "Newsletter already sent" }, { status: 409 })
 
   const subscribers = await getActiveSubscribers()
-  if (subscribers.length === 0) return NextResponse.json({ success: true, sent: 0 })
 
   try {
     const sent = await sendNewsletter(post, subscribers)

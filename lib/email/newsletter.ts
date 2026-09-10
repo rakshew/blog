@@ -3,9 +3,18 @@ import "server-only"
 import type { Post } from "@/lib/types"
 import type { Subscriber } from "@/lib/api/subscribers"
 import { getEmailConfig, getResend } from "@/lib/email/resend"
-import { newsletterEmail } from "@/lib/email/templates"
+import { newsletterEmail, welcomeEmail } from "@/lib/email/templates"
+
+export async function sendWelcomeEmail(subscriber: Subscriber) {
+  const resend = getResend()
+  const { from } = getEmailConfig()
+  const result = await resend.emails.send({ from, ...welcomeEmail(subscriber) })
+  if (result.error) throw new Error(result.error.message)
+}
 
 export async function sendNewsletter(post: Post, subscribers: Subscriber[]) {
+  if (subscribers.length === 0) return 0
+
   const resend = getResend()
   const { from, siteUrl } = getEmailConfig()
   let sent = 0

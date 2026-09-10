@@ -20,8 +20,8 @@ export function isValidEmail(email: string) {
 export async function requestSubscription(input: string): Promise<{ subscriber: Subscriber | null; shouldSend: boolean }> {
   const email = normalizeEmail(input)
   const created = await sql`
-    INSERT INTO public.subscribers (email)
-    VALUES (${email})
+    INSERT INTO public.subscribers (email, status, confirmed_at, unsubscribed_at)
+    VALUES (${email}, 'active', now(), NULL)
     ON CONFLICT (lower(email)) DO NOTHING
     RETURNING id, email, confirmation_token, unsubscribe_token
   `
@@ -46,11 +46,11 @@ export async function requestSubscription(input: string): Promise<{ subscriber: 
 
   const updated = await sql`
     UPDATE public.subscribers
-    SET status = 'pending', confirmation_token = gen_random_uuid(), confirmed_at = NULL, unsubscribed_at = NULL
+    SET status = 'active', confirmed_at = now(), unsubscribed_at = NULL
     WHERE id = ${existing.id}
     RETURNING id, email, confirmation_token, unsubscribe_token
   `
-  return { subscriber: updated[0] as Subscriber, shouldSend: true }
+  return { subscriber: updated[0] as Subscriber, shouldSend: existing.status === "unsubscribed" }
 }
 
 export async function confirmSubscription(token: string) {

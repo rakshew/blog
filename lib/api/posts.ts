@@ -16,6 +16,7 @@ export type PostInput = {
   cover_image_url: string | null
   cover_image_alt: string | null
   cover_image_caption: string | null
+  email_preview: string | null
 }
 
 export async function getPublishedPosts(): Promise<Post[]> {
@@ -87,6 +88,7 @@ export async function createPost(data: PostInput): Promise<{ id: string }> {
       cover_image_url,
       cover_image_alt,
       cover_image_caption,
+      email_preview,
       updated_at
     )
     VALUES (
@@ -102,6 +104,7 @@ export async function createPost(data: PostInput): Promise<{ id: string }> {
       ${data.cover_image_url},
       ${data.cover_image_alt},
       ${data.cover_image_caption},
+      ${data.email_preview},
       now()
     )
     RETURNING id
@@ -129,6 +132,7 @@ export async function updatePost(
       cover_image_url = ${data.cover_image_url},
       cover_image_alt = ${data.cover_image_alt},
       cover_image_caption = ${data.cover_image_caption},
+      email_preview = ${data.email_preview},
       updated_at = now()
     WHERE id = ${id}
     RETURNING id

@@ -25,5 +25,6 @@ export interface Post {
   cover_image_url: string | null
   cover_image_alt: string | null
   cover_image_caption: string | null
+  email_preview: string | null
   newsletter_sent_at: string | null
 }

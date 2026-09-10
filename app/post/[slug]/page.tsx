@@ -7,6 +7,7 @@ import {
 } from "@/lib/api/posts"
 import type { Metadata } from "next"
 import { SubscribeForm } from "@/components/subscribe-form"
+import { PostContent } from "@/components/post-content"
 
 export const revalidate = 0
 
@@ -39,10 +40,6 @@ function formatDate(dateString: string) {
     month: "long",
     day: "numeric",
   })
-}
-
-function looksLikeHtml(content: string) {
-  return /<\/?[a-z][\s\S]*>/i.test(content)
 }
 
 export default async function PostPage({ params }: Props) {
@@ -124,26 +121,7 @@ export default async function PostPage({ params }: Props) {
         </figure>
       )}
 
-      {post.is_poetry ? (
-        looksLikeHtml(post.content) ? (
-          <div
-            className="mt-10 font-serif text-lg leading-loose"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        ) : (
-          <div className="mt-10 font-serif text-lg leading-loose whitespace-pre-wrap">
-            {post.content}
-          </div>
-        )
-      ) : (
-        looksLikeHtml(post.content) ? (
-          <div className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: post.content }} />
-        ) : (
-          <div className="mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed whitespace-pre-wrap break-words">
-            {post.content}
-          </div>
-        )
-      )}
+      <PostContent content={post.content} isPoetry={post.is_poetry} />
       <div className="mt-16">
         <SubscribeForm />
       </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth/server"
 import { deletePost, updatePost } from "@/lib/api/posts"
+import { isHttpsUrl } from "@/lib/content/inline-images"
 
 type Props = {
   params: Promise<{ id: string }>
@@ -48,6 +49,7 @@ export async function PATCH(request: Request, { params }: Props) {
       cover_image_url,
       cover_image_alt,
       cover_image_caption,
+      email_preview,
     } = body
 
     if (!title || !slug || !content) {
@@ -64,6 +66,10 @@ export async function PATCH(request: Request, { params }: Props) {
       )
     }
 
+    if (cover_image_url && !isHttpsUrl(cover_image_url)) {
+      return NextResponse.json({ error: "Cover image URL must use HTTPS" }, { status: 400 })
+    }
+
     const post = await updatePost(id, {
       title,
       slug,
@@ -77,6 +83,7 @@ export async function PATCH(request: Request, { params }: Props) {
       cover_image_url: cover_image_url || null,
       cover_image_alt: cover_image_alt || null,
       cover_image_caption: cover_image_caption || null,
+      email_preview: email_preview || null,
     })
 
     if (!post) {
