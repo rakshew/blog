@@ -224,22 +224,8 @@ export function PostForm({ post }: PostFormProps) {
           <label htmlFor="content" className="text-sm font-medium">
             Content
           </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={isPoetry}
-              onChange={(e) => setIsPoetry(e.target.checked)}
-              className="w-4 h-4 rounded border-input accent-primary"
-            />
-            <span className="text-sm text-muted-foreground">Poetry mode</span>
-          </label>
         </div>
-        <RichPostEditor value={content} onChange={setContent} />
-        {isPoetry && (
-          <p className="text-xs text-muted-foreground">
-            Poetry mode preserves line breaks and uses serif typography.
-          </p>
-        )}
+        <RichPostEditor value={content} onChange={setContent} isPoetry={isPoetry} onPoetryChange={setIsPoetry} />
       </div>
 
       <div className="space-y-2">

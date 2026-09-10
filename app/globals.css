@@ -88,6 +88,34 @@
 ::selection {
   background-color: hsl(11 66% 62% / 0.2);
 }
+
+.blog-inline-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 2rem auto;
+  border-radius: 0.75rem;
+}
+
+[data-indent="1"] { margin-left: 2rem; }
+[data-indent="2"] { margin-left: 4rem; }
+[data-indent="3"] { margin-left: 6rem; }
+[data-indent="4"] { margin-left: 8rem; }
+[data-indent="5"] { margin-left: 10rem; }
+[data-indent="6"] { margin-left: 12rem; }
+
+.poetry-content { font-family: Georgia, "Times New Roman", serif; line-height: 1.9; }
+.poetry-content p { margin-top: 0; margin-bottom: 0; }
+
+.instagram-embed-shell {
+  width: 100%; max-width: 580px; margin: 2.5rem auto; padding: 1rem;
+  display: flex; justify-content: center; align-items: center; box-sizing: border-box;
+  border-radius: 1rem; background: #0a0a0a; border: 1px solid #27272a; overflow: hidden;
+}
+.instagram-embed-shell .instagram-media { width: 100% !important; max-width: 540px !important; min-width: 0 !important; margin: 0 auto !important; }
+.instagram-embed-shell iframe { display: block !important; width: 100% !important; max-width: 540px !important; margin: 0 auto !important; border-radius: 0.75rem !important; background: #000 !important; color-scheme: dark; }
+@media (max-width: 640px) { .instagram-embed-shell { padding: 0.5rem; margin: 1.5rem auto; } }
 /* =========================
    ACCESSIBILITY MODES
 ========================= */

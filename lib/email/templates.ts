@@ -55,7 +55,7 @@ export function confirmationEmail(siteUrl: string, token: string) {
   }
 }
 
-export function welcomeEmail(subscriber: Subscriber) {
+export function welcomeEmail(subscriber: Pick<Subscriber, "email" | "unsubscribe_token">) {
   return {
     to: subscriber.email,
     subject: "It has been officiated :D",
@@ -75,10 +75,11 @@ export function newsletterEmail(siteUrl: string, post: Post, subscriber: Subscri
     ? `<figure><img src="${escapeHtml(post.cover_image_url)}" alt="${escapeHtml(post.cover_image_alt || post.title)}" />${post.cover_image_caption ? `<figcaption>${escapeHtml(post.cover_image_caption)}</figcaption>` : ""}</figure>`
     : ""
   const preview = post.email_preview && post.email_preview.trim() ? post.email_preview : plainPreview(post.content)
+  const continuationText = "That is all I could squeeze into your postbox. The rest of it awaits you at the printing press."
   return {
     to: subscriber.email,
     subject: post.title,
-    html: `<article><p>Rakshi</p><time>${postDate}</time><h1>${escapeHtml(post.title)}</h1>${image}<div>${escapeHtml(preview).replace(/\r?\n/g, "<br />")}</div><p>. . .</p><p>Well, that's all that can fit in the post-box. The rest of it is waiting for you on at our writing station.</p><p><a href="${postUrl}">Continue reading →</a></p><p><a href="${unsubscribeUrl}">Unsubscribe</a></p></article>`,
+    html: `<article><p>Rakshi</p><time>${postDate}</time><h1>${escapeHtml(post.title)}</h1>${image}<div>${escapeHtml(preview).replace(/\r?\n/g, "<br />")}</div><p style="margin: 28px 0 18px; font-size: 15px; line-height: 1.7; font-style: italic;">${continuationText}</p><p><a href="${postUrl}">Continue reading →</a></p><p><a href="${unsubscribeUrl}">Unsubscribe</a></p></article>`,
     headers: { "List-Unsubscribe": `<${unsubscribeUrl}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
   }
 }

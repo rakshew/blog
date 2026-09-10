@@ -121,7 +121,9 @@ export default async function PostPage({ params }: Props) {
         </figure>
       )}
 
-      <PostContent content={post.content} isPoetry={post.is_poetry} />
+      <div className={post.is_poetry ? "poetry-content" : undefined}>
+        <PostContent content={post.content} isPoetry={post.is_poetry} />
+      </div>
       <div className="mt-16">
         <SubscribeForm />
       </div>

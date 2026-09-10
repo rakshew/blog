@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { normalizeEmail, requestSubscription, isValidEmail } from "@/lib/api/subscribers"
-import { sendWelcomeEmail } from "@/lib/email/newsletter"
+import { getEmailConfig, getResend } from "@/lib/email/resend"
+import { confirmationEmail } from "@/lib/email/templates"
 
 function errorDetails(error: unknown) {
   const value = error as { code?: string; name?: string; message?: string }
@@ -21,11 +22,13 @@ export async function POST(request: Request) {
     try {
       const subscription = await requestSubscription(email)
       if (subscription.shouldSend && subscription.subscriber) {
-        try {
-          await sendWelcomeEmail(subscription.subscriber)
-        } catch (error) {
-          console.error("Welcome email failed", error)
-        }
+        const { from, siteUrl } = getEmailConfig()
+        const result = await getResend().emails.send({
+          from,
+          to: subscription.subscriber.email,
+          ...confirmationEmail(siteUrl, subscription.subscriber.confirmation_token),
+        })
+        if (result.error) throw new Error(result.error.message)
       }
     } catch (error) {
       console.error("Subscription database failed", errorDetails(error))

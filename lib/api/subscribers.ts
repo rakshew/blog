@@ -21,7 +21,7 @@ export async function requestSubscription(input: string): Promise<{ subscriber: 
   const email = normalizeEmail(input)
   const created = await sql`
     INSERT INTO public.subscribers (email, status, confirmed_at, unsubscribed_at)
-    VALUES (${email}, 'active', now(), NULL)
+    VALUES (${email}, 'pending', NULL, NULL)
     ON CONFLICT (lower(email)) DO NOTHING
     RETURNING id, email, confirmation_token, unsubscribe_token
   `
@@ -46,21 +46,32 @@ export async function requestSubscription(input: string): Promise<{ subscriber: 
 
   const updated = await sql`
     UPDATE public.subscribers
-    SET status = 'active', confirmed_at = now(), unsubscribed_at = NULL
+    SET status = 'pending', confirmed_at = NULL, unsubscribed_at = NULL
     WHERE id = ${existing.id}
     RETURNING id, email, confirmation_token, unsubscribe_token
   `
-  return { subscriber: updated[0] as Subscriber, shouldSend: existing.status === "unsubscribed" }
+  return { subscriber: updated[0] as Subscriber, shouldSend: true }
 }
 
-export async function confirmSubscription(token: string) {
-  const rows = await sql`
+export async function confirmSubscriber(confirmationToken: string) {
+  const activated = await sql`
     UPDATE public.subscribers
-    SET status = 'active', confirmed_at = now(), unsubscribed_at = NULL
-    WHERE confirmation_token = ${token} AND status = 'pending'
-    RETURNING id
+    SET status = 'active', confirmed_at = COALESCE(confirmed_at, now()), unsubscribed_at = NULL
+    WHERE confirmation_token = ${confirmationToken} AND status = 'pending'
+    RETURNING id, email, status, confirmation_token, unsubscribe_token, created_at, confirmed_at, unsubscribed_at
   `
-  return rows.length > 0
+
+  if (activated.length > 0) return { subscriber: activated[0], justActivated: true }
+
+  const existing = await sql`
+    SELECT id, email, status, confirmation_token, unsubscribe_token, created_at, confirmed_at, unsubscribed_at
+    FROM public.subscribers
+    WHERE confirmation_token = ${confirmationToken}
+    LIMIT 1
+  `
+
+  if (existing.length === 0) return null
+  return { subscriber: existing[0], justActivated: false }
 }
 
 export async function unsubscribeSubscriber(token: string) {

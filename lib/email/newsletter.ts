@@ -5,7 +5,7 @@ import type { Subscriber } from "@/lib/api/subscribers"
 import { getEmailConfig, getResend } from "@/lib/email/resend"
 import { newsletterEmail, welcomeEmail } from "@/lib/email/templates"
 
-export async function sendWelcomeEmail(subscriber: Subscriber) {
+export async function sendWelcomeEmail(subscriber: Pick<Subscriber, "email" | "unsubscribe_token">) {
   const resend = getResend()
   const { from } = getEmailConfig()
   const result = await resend.emails.send({ from, ...welcomeEmail(subscriber) })
