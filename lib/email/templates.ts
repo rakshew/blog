@@ -51,7 +51,7 @@ export function confirmationEmail(siteUrl: string, token: string) {
   const url = `${siteUrl}/api/subscribe/confirm?token=${encodeURIComponent(token)}`
   return {
     subject: "Confirm your subscription",
-    html: `<p>Thanks for subscribing to Rakshi. Confirm your subscription to receive new posts.</p><p><a href="${url}">Confirm subscription</a></p>`,
+    html: `<p>Thanks for subscribing to Rakshii.xyz. Confirm your subscription to receive new posts.</p><p><a href="${url}">Confirm subscription</a></p>`,
   }
 }
 
@@ -59,7 +59,7 @@ export function welcomeEmail(subscriber: Pick<Subscriber, "email" | "unsubscribe
   return {
     to: subscriber.email,
     subject: "It has been officiated :D",
-    html: `<p>Now that you have subscribed to my blog, I suppose it has been officiated that we are true companions who wish each other well :D Occasionally, allow me to slip a letter beneath your door, containing whatever I dearly wish to share with you. Thank you for choosing to stay and listen. May we continue<br />to treasure this little friendship together. Allow me to host you with a tumbler of tea held in our palms, and may we yap all things wonderfully inconsequential.</p><p>Owing to the limits of my database, I am unable to keep a comment section<br />here. But should you ever wish to write back, you may find me on Instagram at<br /><a href="https://www.instagram.com/kumizh.uwu/">@kumizh.uwu</a>, so that this correspondence need not remain entirely one-sided.</p><p>See you along the way of our lives,<br />With hearty wishes,<br />Kumizh &lt;3</p>`,
+    html: `<p>Now that you have subscribed to my blog, I suppose it has been officiated that we are true companions who wish each other well :D Occasionally, allow me to slip a letter beneath your door, containing whatever I dearly wish to share with you. Thank you for choosing to stay and listen. May we continue to treasure this friendship together. Allow me to host you with a tumbler of tea held in our palms, and may we yap all things wonderfully inconsequential.</p><p>Owing to the limits of my database, I am unable to keep a comment section here. But should you ever wish to write back, you may find me on Instagram at <a href="https://www.instagram.com/kumizh.uwu/">@kumizh.uwu</a>, so that this correspondence need not remain entirely one-sided.</p><p>See you along the way of our lives,<br />With hearty wishes,<br />Kumizh &lt;3</p>`,
   }
 }
 
@@ -75,7 +75,7 @@ export function newsletterEmail(siteUrl: string, post: Post, subscriber: Subscri
     ? `<figure><img src="${escapeHtml(post.cover_image_url)}" alt="${escapeHtml(post.cover_image_alt || post.title)}" />${post.cover_image_caption ? `<figcaption>${escapeHtml(post.cover_image_caption)}</figcaption>` : ""}</figure>`
     : ""
   const preview = post.email_preview && post.email_preview.trim() ? post.email_preview : plainPreview(post.content)
-  const continuationText = "That is all I could squeeze into your postbox. The rest of it awaits you at the printing press."
+  const continuationText = "That is all I could squeeze into your postbox. The rest of it awaits you at the printing press! :D."
   return {
     to: subscriber.email,
     subject: post.title,
