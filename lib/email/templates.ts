@@ -75,7 +75,7 @@ export function newsletterEmail(siteUrl: string, post: Post, subscriber: Subscri
     ? `<figure><img src="${escapeHtml(post.cover_image_url)}" alt="${escapeHtml(post.cover_image_alt || post.title)}" />${post.cover_image_caption ? `<figcaption>${escapeHtml(post.cover_image_caption)}</figcaption>` : ""}</figure>`
     : ""
   const preview = post.email_preview && post.email_preview.trim() ? post.email_preview : plainPreview(post.content)
-  const continuationText = "That is all I could squeeze into your postbox. The rest of it awaits you at the printing press! :D."
+  const continuationText = "That is all I could squeeze into your postbox. The rest of it awaits you at the printing press! :D.</p><p>ʔ> © 2026 Rakshita Murugan / Kumizh. All rights reserved."
   return {
     to: subscriber.email,
     subject: post.title,
