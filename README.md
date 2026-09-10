@@ -1,2 +1,2 @@
 # blog
-My personal blog 
+My personal blog at rakshii.xyz
