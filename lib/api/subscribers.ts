@@ -92,3 +92,35 @@ export async function getActiveSubscribers(): Promise<Subscriber[]> {
     ORDER BY created_at ASC
   `) as Subscriber[]
 }
+
+export async function getActiveSubscribersSince(
+  since: string | Date | null,
+  until: string | Date
+): Promise<Subscriber[]> {
+  const untilValue =
+    until instanceof Date ? until.toISOString() : until
+
+  if (!since) {
+    return (await sql`
+      SELECT id, email, confirmation_token, unsubscribe_token
+      FROM public.subscribers
+      WHERE status = 'active'
+        AND confirmed_at IS NOT NULL
+        AND confirmed_at <= ${untilValue}
+      ORDER BY confirmed_at ASC
+    `) as Subscriber[]
+  }
+
+  const sinceValue =
+    since instanceof Date ? since.toISOString() : since
+
+  return (await sql`
+    SELECT id, email, confirmation_token, unsubscribe_token
+    FROM public.subscribers
+    WHERE status = 'active'
+      AND confirmed_at IS NOT NULL
+      AND confirmed_at > ${sinceValue}
+      AND confirmed_at <= ${untilValue}
+    ORDER BY confirmed_at ASC
+  `) as Subscriber[]
+}

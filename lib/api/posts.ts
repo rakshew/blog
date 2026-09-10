@@ -141,15 +141,15 @@ export async function updatePost(
   return rows.length > 0 ? (rows[0] as { id: string }) : null
 }
 
-export async function markNewsletterSent(id: string): Promise<boolean> {
-  const rows = await sql`
+export async function markNewsletterSent(
+  id: string,
+  sentAt: Date
+) {
+  await sql`
     UPDATE public.posts
-    SET newsletter_sent_at = now(), updated_at = now()
+    SET newsletter_sent_at = ${sentAt.toISOString()}
     WHERE id = ${id}
-    RETURNING id
   `
-
-  return rows.length > 0
 }
 
 export async function deletePost(id: string): Promise<string | null> {
