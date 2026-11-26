@@ -252,3 +252,16 @@ html.a11y-reduce-motion *::after {
   transition: none !important;
   scroll-behavior: auto !important;
 }
+
+/* Authored text follows the active theme, including pasted inline colours. */
+.ProseMirror,
+.post-theme-text {
+  color: hsl(var(--foreground));
+}
+.ProseMirror :where(p, h1, h2, h3, h4, h5, h6, blockquote, li, ul, ol, span, strong, b, em, i, u, s, del, a, code, pre, mark, font):not(.instagram-embed-shell, .instagram-embed-shell *, .instagram-media, .instagram-media *),
+.post-theme-text :where(p, h1, h2, h3, h4, h5, h6, blockquote, li, ul, ol, span, strong, b, em, i, u, s, del, a, code, pre, mark, font):not(.instagram-embed-shell, .instagram-embed-shell *, .instagram-media, .instagram-media *) {
+  color: hsl(var(--foreground)) !important;
+}
+.post-theme-text figcaption {
+  color: hsl(var(--muted-foreground));
+}
