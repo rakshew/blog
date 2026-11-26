@@ -17,7 +17,7 @@ function looksLikeHtml(content: string) {
 
 export function PostContent({ content, isPoetry }: PostContentProps) {
   const contentClassName = isPoetry
-    ? "mt-10 font-serif text-lg leading-loose"
+    ? "mt-10 font-serif text-lg leading-loose poetry-renderer"
     : "mt-10 prose prose-neutral dark:prose-invert max-w-none text-lg leading-relaxed"
 
   useEffect(() => {
