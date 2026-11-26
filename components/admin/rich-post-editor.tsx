@@ -66,9 +66,10 @@ function escapeHtml(value: string) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;")
 }
 
-function normalizeInitialContent(value: string) {
+function normalizeInitialContent(value: string, isPoetry: boolean) {
   if (!value) return "<p></p>"
   if (/<[a-z][\s\S]*>/i.test(value)) return value
+  if (isPoetry) return value.replace(/\r\n?/g, "\n").split("\n").map((line) => `<p>${escapeHtml(line)}</p>`).join("")
   return value.split(/\n\n+/).map((block) => `<p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>`).join("")
 }
 
@@ -82,6 +83,8 @@ function isInstagramUrl(value: string) {
 }
 
 export function RichPostEditor({ value, onChange, isPoetry, onPoetryChange }: RichPostEditorProps) {
+  const poetryModeRef = useRef(isPoetry)
+  useEffect(() => { poetryModeRef.current = isPoetry }, [isPoetry])
   const imageInputRef = useRef<HTMLInputElement>(null)
   const savedImagePosition = useRef<number | null>(null)
   const [uploading, setUploading] = useState(false)
@@ -99,16 +102,36 @@ export function RichPostEditor({ value, onChange, isPoetry, onPoetryChange }: Ri
       Indent,
       InstagramEmbed,
     ],
-    content: normalizeInitialContent(value),
-    editorProps: { attributes: { class: "min-h-[420px] px-4 py-4 focus:outline-none prose dark:prose-invert max-w-none" } },
+    content: normalizeInitialContent(value, isPoetry),
+    parseOptions: isPoetry ? { preserveWhitespace: "full" } : {},
+    editorProps: {
+      attributes: { class: "min-h-[420px] px-4 py-4 focus:outline-none prose dark:prose-invert max-w-none" },
+      handlePaste(view, event) {
+        if (!poetryModeRef.current || !event.clipboardData || event.clipboardData.getData("text/html")) return false
+        const text = event.clipboardData.getData("text/plain").replace(/\r\n?/g, "\n")
+        if (!text) return false
+        const { state } = view
+        const lines = text.split("\n")
+        if (lines.length === 1) {
+          view.dispatch(state.tr.insertText(text).scrollIntoView())
+          return true
+        }
+        const { schema } = state
+        const paragraphs = lines.map((line) => schema.nodes.paragraph.create(null, line ? schema.text(line) : undefined))
+        const doc = schema.topNodeType.create(null, paragraphs)
+        const slice = doc.slice(1, doc.content.size - 1)
+        view.dispatch(state.tr.replaceSelection(slice).scrollIntoView())
+        return true
+      },
+    },
     onUpdate: ({ editor: updatedEditor }) => onChange(updatedEditor.getHTML()),
   })
 
   useEffect(() => {
     if (!editor) return
-    const incoming = normalizeInitialContent(value)
-    if (editor.getHTML() !== incoming) editor.commands.setContent(incoming, { emitUpdate: false })
-  }, [editor, value])
+    const incoming = normalizeInitialContent(value, isPoetry)
+    if (editor.getHTML() !== incoming) editor.commands.setContent(incoming, { emitUpdate: false, parseOptions: isPoetry ? { preserveWhitespace: "full" } : {} })
+  }, [editor, value, isPoetry])
 
   if (!editor) return null
   const currentEditor = editor
@@ -198,10 +221,10 @@ export function RichPostEditor({ value, onChange, isPoetry, onPoetryChange }: Ri
         <button type="button" className={buttonClass(isPoetry)} onClick={() => onPoetryChange(!isPoetry)}>Poetry</button>
       </div>
       <input ref={imageInputRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden onChange={(event) => { const file = event.target.files?.[0]; if (file) void uploadImage(file) }} />
-      <div className={["rounded-b-md border border-t-0 border-border bg-background", isPoetry ? "[&_.ProseMirror]:font-serif [&_.ProseMirror]:leading-[1.9] [&_.ProseMirror_p]:my-0" : "", "[&_.ProseMirror_img]:mx-auto [&_.ProseMirror_img]:my-6 [&_.ProseMirror_img]:max-w-full [&_.ProseMirror_img]:rounded-lg", "[&_[data-indent='1']]:ml-8 [&_[data-indent='2']]:ml-16 [&_[data-indent='3']]:ml-24 [&_[data-indent='4']]:ml-32 [&_[data-indent='5']]:ml-40 [&_[data-indent='6']]:ml-48"].join(" ")}>
+      <div className={["rounded-b-md border border-t-0 border-border bg-background", isPoetry ? "poetry-editor [&_.ProseMirror]:font-serif [&_.ProseMirror]:leading-[1.9]" : "", "[&_.ProseMirror_img]:mx-auto [&_.ProseMirror_img]:my-6 [&_.ProseMirror_img]:max-w-full [&_.ProseMirror_img]:rounded-lg", "[&_[data-indent='1']]:ml-8 [&_[data-indent='2']]:ml-16 [&_[data-indent='3']]:ml-24 [&_[data-indent='4']]:ml-32 [&_[data-indent='5']]:ml-40 [&_[data-indent='6']]:ml-48"].join(" ")}>
         <EditorContent editor={editor} />
       </div>
-      {isPoetry && <p className="text-xs text-muted-foreground">Poetry mode is active. Line spacing is preserved and paragraph gaps are removed.</p>}
+      {isPoetry && <p className="text-xs text-muted-foreground">Poetry mode is active. Press Enter for a new verse line, and Enter twice for a blank line between stanzas. Shift+Enter inserts a line break within a paragraph.</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   )
